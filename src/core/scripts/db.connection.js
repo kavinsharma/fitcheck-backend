@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { default: config } = require("../../config");
+const config = require("../../config");
 
 let dbConnection;
 
@@ -14,7 +14,7 @@ exports.connectToReqDatabase = async (req, res, next) => {
     console.log("----DB----PREVIOUS-CONNECTION----------------");
     next();
   } else {
-    mongoose.connect(config.DB_STRING, options).then(
+    mongoose.connect(config.MONGODB_CONNECTION_URL, options).then(
       db => {
         console.log("----DB----NEW-CONNECTION----------------");
         dbConnection = db.connections[0].readyState;

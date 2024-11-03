@@ -4,10 +4,10 @@ const config = require("./config");
 const { connectToReqDatabase } = require("./core/scripts/db.connection");
 
 const routes = require("./app/routes/index.routes");
-const { setupLogger } = require("./app/middleware/logger.middleware");
+// const { setupLogger } = require("./app/middleware/logger.middleware");
 
 const app = express();
-setupLogger(app);
+// setupLogger(app);
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
