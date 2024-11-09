@@ -4,7 +4,7 @@
   "description": "nodejs backend for fitcheck",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "nodemon src/index.js",
     "prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "lint": "npm run prettier && eslint ./src",
     "lint-fix": "eslint ./src --fix",
@@ -13,9 +13,11 @@
   "author": "kavinsharma",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "google-search-results-nodejs": "^2.1.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.10.0",
