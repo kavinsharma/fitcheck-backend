@@ -1,35 +1,21 @@
 const mongoose = require("mongoose");
 const config = require("../../config");
 
-let dbConnection;
+let isConnected = false;
 
-const options = {
-  connectTimeoutMS: 200000,
-  socketTimeoutMS: 2000000,
-  useNewUrlParser: true,
-  dbName: config.DB_NAME,
-};
-exports.connectToReqDatabase = async (req, res, next) => {
-  if (dbConnection) {
-    console.log("----DB----PREVIOUS-CONNECTION----------------");
-    next();
-  } else {
-    mongoose.connect(config.MONGODB_CONNECTION_URL, options).then(
-      db => {
-        console.log("----DB----NEW-CONNECTION----------------");
-        dbConnection = db.connections[0].readyState;
-        console.log("----DB----NEW-CONNECTION-INIT----------------");
-        next();
-      },
-      err => {
-        console.log("----DB----ERROR-CONNECTION----------------");
-        console.log(err);
-        return res.send({
-          status_code: 409,
-          success: false,
-          message: "DB connection failure",
-        });
-      },
-    );
+const connectToDb = async () => {
+  try {
+    if (isConnected) {
+      return isConnected;
+    }
+    const MONGO_URL = config.MONGODB_CONNECTION_URL;
+    await mongoose.connect(MONGO_URL);
+    isConnected = true;
+    return isConnected;
+  } catch (error) {
+    console.error("Error connecting to MongoDB database:", error);
+    throw error;
   }
 };
+
+module.exports = { connectToDb };
