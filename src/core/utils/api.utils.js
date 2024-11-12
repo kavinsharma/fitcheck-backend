@@ -7,6 +7,13 @@ const baseSearch = async url => {
   return response.data;
 };
 
+const productSearch = async productId => {
+  console.log("🚀 ~ productSearch ~ productId:", productId);
+  const url = `${config.SERPAPI_BASE_URL}?engine=google_product&product_id=${productId}&api_key=${config.SERPAPI_SECRET_KEY}`;
+  const response = await axios.get(url);
+  return response.data;
+};
+
 const dynamicFilters = async (data, filterType, filterValue) => {
   try {
     let filterdata;
@@ -30,4 +37,4 @@ const dynamicFilters = async (data, filterType, filterValue) => {
   }
 };
 
-module.exports = { baseSearch, dynamicFilters };
+module.exports = { baseSearch, dynamicFilters, productSearch };

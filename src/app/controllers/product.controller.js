@@ -6,7 +6,7 @@ const {
 const errorHandlerMiddleware = require("../../core/handlers/mongooseError.handler");
 const { responseHandler } = require("../../core/handlers/response.handlers");
 const { serapiSearchHandler } = require("../../core/utils/searchHandler.utils");
-const { dynamicFilters } = require("../../core/utils/api.utils");
+const { dynamicFilters, productSearch } = require("../../core/utils/api.utils");
 
 const getList = async (req, res, next) => {
   try {
@@ -33,6 +33,22 @@ const getList = async (req, res, next) => {
       200,
       ResponseMessages.FOUND,
     );
+  } catch (error) {
+    const errorMongoose = errorHandlerMiddleware(error, res);
+    let code = errorMongoose.statusCode;
+    let message = errorMongoose.msg;
+    code = getErrorCode(error);
+    message = getErrorMessage(error);
+    return responseHandler(res, null, code, message);
+  }
+};
+
+const getProductDetails = async (req, res, next) => {
+  try {
+    const productId = req.params.productId;
+
+    const data = await productSearch(productId);
+    responseHandler(res, data, 200, ResponseMessages.OK);
   } catch (error) {
     const errorMongoose = errorHandlerMiddleware(error, res);
     let code = errorMongoose.statusCode;
