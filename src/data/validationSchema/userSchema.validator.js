@@ -12,7 +12,13 @@ const registerOneSchema = Joi.object({
 const registerTwoSchema = Joi.object({
   password: Joi.string().trim().required(),
 });
-
+const forgetPasswordSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+const createPasswordSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().trim().required(),
+});
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().trim().required(),
@@ -22,4 +28,10 @@ const loginSchema = Joi.object({
   long: Joi.number(),
 });
 
-module.exports = { registerOneSchema, loginSchema, registerTwoSchema };
+module.exports = {
+  registerOneSchema,
+  loginSchema,
+  registerTwoSchema,
+  forgetPasswordSchema,
+  createPasswordSchema,
+};
