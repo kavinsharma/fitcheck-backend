@@ -31,6 +31,18 @@ const register = async (req, res, next) => {
   }
 };
 
+const userDetails = async (req, res, next) => {
+  try {
+  } catch (error) {
+    const errorMongoose = errorHandlerMiddleware(error, res);
+    let code = errorMongoose.statusCode;
+    let message = errorMongoose.msg;
+    code = getErrorCode(error);
+    message = getErrorMessage(error);
+    return responseHandler(res, null, code, message);
+  }
+};
+
 const login = async (req, res, next) => {
   try {
     const value = req.value;
@@ -53,4 +65,4 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login };
+module.exports = { register, login, userDetails };

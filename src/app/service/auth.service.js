@@ -13,21 +13,16 @@ const userModel = require("../../data/models/user.model");
 
 const userSignup = async value => {
   value.password = await generateHash(value.password);
+  const user = await dal.find(userModel, { email: value.email });
 
-  let count;
-
-  count = await dal.find(
-    userModel,
-    { email: value.email, emailVerified: true },
-    { limit: 1 },
-    { email: 1 },
-  );
-  if (value.email && count.length > 0 && count[0].email) {
+  if (value.email && user.length > 0 && user[0].email) {
     throw new CustomError(
       ResponseMessages.RES_MSG_USER_EMAIL_ALREADY_EXISTS_EN,
       "400",
     );
   }
+  value.emailVerified = true;
+
   const create = await dal.create(userModel, value);
   const otp = generateOtpCode();
 
@@ -69,8 +64,8 @@ const loginService = async value => {
   );
 
   return {
-    accessToken: accessToken,
     userData,
+    accessToken: accessToken,
   };
 };
 module.exports = { userSignup, loginService };
