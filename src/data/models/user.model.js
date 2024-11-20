@@ -31,7 +31,9 @@ const userSchema = Schema(
     imageUrl: {
       type: String,
     },
-
+    googleKey: {
+      type: String,
+    },
     verifiedUser: {
       type: Boolean,
     },
