@@ -9,6 +9,7 @@ const connectToDb = async () => {
       return isConnected;
     }
     const MONGO_URL = config.MONGODB_CONNECTION_URL;
+    console.log("🚀 ~ connectToDb ~ MONGO_URL:", MONGO_URL);
     await mongoose.connect(MONGO_URL);
     isConnected = true;
     return isConnected;
