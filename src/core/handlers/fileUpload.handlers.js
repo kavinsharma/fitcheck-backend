@@ -61,4 +61,23 @@ const deleteFile = async fileName => {
   return response;
 };
 
-module.exports = { deleteFile, generatePublicS3FileUrl };
+const uploadGeneralFile = async (buffer, fileName) => {
+  let file_name =
+    "fitcheck/" +
+    Date.now() +
+    "-fitcheck-" +
+    Math.floor(Math.random() * 100 + 1) +
+    "." +
+    fileName.split(".").pop();
+
+  const params = {
+    Bucket: bucketName,
+    Key: `${file_name}`,
+    Body: buffer,
+  };
+
+  const response = await s3.upload(params).promise();
+  console.log("File uploaded successfully.", response.Location);
+  return response.Location;
+};
+module.exports = { deleteFile, generatePublicS3FileUrl, uploadGeneralFile };

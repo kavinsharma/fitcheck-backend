@@ -1,9 +1,11 @@
 const router = require("express").Router();
-const multipart = require("connect-multiparty");
-const multipartMiddleware = multipart();
+const multer = require("multer");
+const upload = multer();
 
-const { upload } = require("../controllers/upload.controller");
+const {
+  upload: uploadController,
+} = require("../controllers/upload.controller");
 
-router.route("/").get(multipartMiddleware, upload);
+router.route("/").post(upload.single("files"), uploadController);
 
 module.exports = router;
