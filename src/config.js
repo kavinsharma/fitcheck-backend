@@ -21,8 +21,8 @@ const getConfig = () => {
       ? process.env.GOOGLE_CALLBACK_URL_UAT
       : "",
     AWS_REGION: process.env.AWS_REGION,
-    AWS_ACCESS_KEY_ID: process.env.AWS_SNS_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY: process.env.AWS_SNS_SECRET_ACCESS_KEY,
+    AWS_ACCESS_KEY_ID: process.env.ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.SECRET_ACCESS_KEY,
     AWS_SENDERS_EMAIL: process.env.AWS_SENDERS_EMAIL,
     JWT_SECRET: process.env.JWT_SECRET,
     SEED_ADMIN_USERNAME: process.env.SEED_ADMIN_USERNAME,
