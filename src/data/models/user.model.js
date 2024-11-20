@@ -3,6 +3,9 @@ const Schema = mongoose.Schema;
 
 const userSchema = Schema(
   {
+    userName: {
+      type: String,
+    },
     firstName: {
       type: String,
       require: "First name is required",
@@ -13,6 +16,10 @@ const userSchema = Schema(
     email: {
       type: String,
       lowercase: true,
+    },
+    emailVerified: {
+      type: Boolean,
+      default: false,
     },
     countryCode: {
       type: String,
