@@ -5,9 +5,9 @@ const PORT = config.PORT ?? 8080;
 
 app.listen(PORT, async () => {
   console.log("🚀 ~ app.listen ~ PORT:", `${PORT}`);
-  const isConnected = await connectToDb();
-  if (!isConnected) {
-    console.error("Process has been terminated due to db connection failure!!");
-    process.exit(0);
-  }
+  // const isConnected = await connectToDb();
+  // if (!isConnected) {
+  //   console.error("Process has been terminated due to db connection failure!!");
+  //   process.exit(0);
+  // }
 });
