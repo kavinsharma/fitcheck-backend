@@ -1,4 +1,4 @@
-const model = require("../../data/models/brandMaster.model");
+const model = require("../../data/models/styleTypeMaster.models");
 const dal = require("../../data/dal/index");
 
 exports.create = async body => {
@@ -6,6 +6,7 @@ exports.create = async body => {
 };
 
 exports.createMany = async body => {
+  console.log("createMany is ", body);
   return await dal.createMany(model, body);
 };
 

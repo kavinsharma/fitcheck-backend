@@ -11,7 +11,7 @@ const {
   login,
   userDetails,
   verifyHash,
-  oauthCallback
+  oauthCallback,
 } = require("../controllers/auth.controller");
 const { verify } = require("jsonwebtoken");
 const { verifyToken } = require("../middleware/verifyToken.js");
@@ -43,9 +43,9 @@ router.route("/google").get(function (req, res, next) {
         if (err) {
           return next(err);
         }
-        return res.redirect("/profile")
+        return res.redirect("/profile");
       });
-    }
+    },
   )(req, res, next);
 });
 
@@ -54,7 +54,7 @@ router.route("/google/callback").get(
     session: false,
     failureRedirect: "/login",
   }),
-  oauthCallback
+  oauthCallback,
 );
 
 module.exports = router;
