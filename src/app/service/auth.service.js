@@ -1,3 +1,4 @@
+const config = require("../../config");
 const { ResponseMessages } = require("../../core/constants/cloud.constants");
 const { Purpose } = require("../../core/enum/auth.enum");
 const { CustomError } = require("../../core/handlers/error.handlers");
