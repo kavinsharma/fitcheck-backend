@@ -1,13 +1,11 @@
 const { ResponseMessages } = require("../../core/constants/cloud.constants");
-const {
-  generatePublicS3FileUrl,
-  uploadGeneralFile,
-} = require("../../core/handlers/fileUpload.handlers");
 const { responseHandler } = require("../../core/handlers/response.handlers");
+const { uploadService } = require("../service/upload.service");
 
 const upload = async (req, res, next) => {
   try {
     const buffer = req.file.buffer;
+    const body = req.body;
 
     const uploadedFileName = req.file.originalname;
     if (!buffer) {
@@ -19,8 +17,9 @@ const upload = async (req, res, next) => {
       );
     }
 
-    const url = await uploadGeneralFile(buffer, uploadedFileName);
-    responseHandler(res, { url }, 200, ResponseMessages.OK);
+    const data = await uploadService(buffer, uploadedFileName, body);
+
+    responseHandler(res, { data }, 200, ResponseMessages.OK);
   } catch (err) {
     console.log("error is ", err);
   }

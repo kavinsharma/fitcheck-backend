@@ -3,7 +3,12 @@ const Joi = require("joi");
 const registerOneSchema = Joi.object({
   email: Joi.string().email().trim().required(),
   name: Joi.string().required(),
+  device_token: Joi.string().required(),
+  device_uuid: Joi.string().required(),
+  lat: Joi.number().required(),
+  long: Joi.number().required(),
 });
+
 const registerTwoSchema = Joi.object({
   password: Joi.string().trim().required(),
 });
@@ -11,6 +16,10 @@ const registerTwoSchema = Joi.object({
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().trim().required(),
+  device_token: Joi.string().required(),
+  device_uuid: Joi.string().required(),
+  lat: Joi.number().required(),
+  long: Joi.number().required(),
 });
 
 module.exports = { registerOneSchema, loginSchema, registerTwoSchema };
