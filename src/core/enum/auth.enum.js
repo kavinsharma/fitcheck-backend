@@ -6,4 +6,4 @@ const Purpose = {
   FORGET_PASSWORD: "ForgetPassword",
 };
 
-module.exports = Purpose;
+module.exports = { Purpose };

@@ -10,7 +10,7 @@ const validate = schema => {
   return (req, res, next) => {
     const { error, value } = schema.validate(req.body, defaults);
     if (error) {
-      return responseHandler(error, res, error.message, 422);
+      return responseHandler(res, error, error.message, 422);
     }
     req.value = value;
     next();

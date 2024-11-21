@@ -6,12 +6,9 @@ const userSchema = Schema(
     userName: {
       type: String,
     },
-    firstName: {
+    name: {
       type: String,
-      require: "First name is required",
-    },
-    lastName: {
-      type: String,
+      require: "Name is required",
     },
     email: {
       type: String,
@@ -44,7 +41,7 @@ const userSchema = Schema(
     },
     active: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   {
