@@ -18,7 +18,7 @@ const dynamicFilters = async (data, filterType, filterValue) => {
   try {
     let filterdata;
 
-    for (const filter of data.filters) {
+    for (const filter of data?.filters) {
       if (filter.type === filterType) {
         for (const op of filter.options) {
           if (op.text.toLowerCase() === filterValue.toLowerCase()) {
