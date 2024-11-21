@@ -27,13 +27,13 @@ const userSignup = async value => {
 
   value.hash = await generateHash(otp);
   value.code = otp;
-
+  let email = value.email;
+  delete value.email;
   const user = await dal.findOneAndUpsert(
     userModel,
-    { email: value.email },
+    { email: email },
     { name: value.name },
   );
-  delete value.email;
   delete value.name;
   let device_token = value.deviceToken;
   delete value.deviceToken;
@@ -46,12 +46,12 @@ const userSignup = async value => {
     value,
   );
 
-  const baseUrl = "http://localhost:8080/api/v1/auth/verify?hash=";
+  const baseUrl = config.F_END_BASE_URL;
   const create = await dal.create(otpModel, {
     userId: user._id,
     hash: value.hash,
     code: value.code,
-    email: value.email,
+    email: user.email,
     purpose: Purpose.SIGNUP,
   });
 

@@ -13,13 +13,12 @@ const {
   verifyService,
   userDetailsService,
   create,
-  upsert
+  upsert,
 } = require("../service/auth.service");
 
 const register = async (req, res, next) => {
   try {
     const value = req.value;
-    console.log("🚀 ~ register ~ value:", value);
 
     const data = await userSignup(value);
 
@@ -51,7 +50,6 @@ const userDetails = async (req, res, next) => {
       200,
       ResponseMessages.RES_MSG_USER_UPDATED_SUCCESSFULLY_EN,
     );
-    console.log("🚀 ~ userDetails ~ value:", value);
   } catch (error) {
     const errorMongoose = errorHandlerMiddleware(error, res);
     let code = errorMongoose.statusCode;
@@ -103,16 +101,15 @@ const verifyHash = async (req, res, next) => {
 const oauthCallback = async (req, res) => {
   try {
     const body = {
-      "name": req.user?.displayName,
+      name: req.user?.displayName,
       status: "active",
       emailVerified: true,
       verifiedUser: true,
       active: true,
-      imageUrl: req.user?.picture
-    }
+      imageUrl: req.user?.picture,
+    };
     const userInDb = await upsert({ email: req.user.email }, body);
-    const redirectUrl = await getUserRedirect(userInDb)
-    console.log("🚀 ~ oauthCallback ~ getUserRedirect(userInDb):", redirectUrl)
+    const redirectUrl = await getUserRedirect(userInDb);
     res.redirect(redirectUrl);
   } catch (err) {
     console.log("error", err);
@@ -124,7 +121,11 @@ const getUserRedirect = async (userInDb, err = null) => {
   if (err) {
     return `${config.GOOGLE_CALLBACK_URL_UAT}/handleAuth?error=${err}`;
   }
-  const body = { userId: userInDb._id, email: userInDb.email, name: userInDb.name }
+  const body = {
+    userId: userInDb._id,
+    email: userInDb.email,
+    name: userInDb.name,
+  };
   token = generateAccessToken(body);
   const response = {
     message: "User Logged In Successfully",
@@ -134,6 +135,5 @@ const getUserRedirect = async (userInDb, err = null) => {
   };
   return `${config.F_END_BASE_URL}?userToken=${token}&userId=${userInDb._id}&userEmail=${userInDb.email}&error=${response.error}`;
 };
-
 
 module.exports = { register, login, userDetails, verifyHash, oauthCallback };
