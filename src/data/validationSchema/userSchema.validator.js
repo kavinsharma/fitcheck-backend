@@ -5,8 +5,8 @@ const registerOneSchema = Joi.object({
   name: Joi.string().required(),
   deviceToken: Joi.string(),
   deviceUid: Joi.string(),
-  lat: Joi.number().required(),
-  long: Joi.number().required(),
+  lat: Joi.number(),
+  long: Joi.number(),
 });
 
 const registerTwoSchema = Joi.object({
@@ -18,8 +18,8 @@ const loginSchema = Joi.object({
   password: Joi.string().trim().required(),
   deviceToken: Joi.string(),
   deviceUid: Joi.string(),
-  lat: Joi.number().required(),
-  long: Joi.number().required(),
+  lat: Joi.number(),
+  long: Joi.number(),
 });
 
 module.exports = { registerOneSchema, loginSchema, registerTwoSchema };
