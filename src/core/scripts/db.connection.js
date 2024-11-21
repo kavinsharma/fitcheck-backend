@@ -3,18 +3,26 @@ const config = require("../../config");
 
 let isConnected = false;
 
+const options = {
+  dbName: config.DB_NAME,
+};
+
 const connectToDb = async () => {
   try {
     if (isConnected) {
-      return isConnected;
+      console.log('----DB----PREVIOUS-CONNECTION----------------');
+      return 'connected'
+    } else {
+      console.log('----DB----NEW-CONNECTION----------------');
+      await mongoose.connect(config.MONGODB_CONNECTION_URL, options);
+      isConnected = mongoose.connection;
+      console.log('----DB----NEW-CONNECTION-INIT---------------');
+      return 'connected'
     }
-    const MONGO_URL = config.MONGODB_CONNECTION_URL;
-    await mongoose.connect(MONGO_URL);
-    isConnected = true;
-    return isConnected;
-  } catch (error) {
-    console.error("Error connecting to MongoDB database:", error);
-    throw error;
+  } catch (err) {
+    console.log('----DB----ERROR-CONNECTION----------------');
+    console.log(err);
+    return 'failed'
   }
 };
 
