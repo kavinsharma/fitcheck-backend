@@ -11,6 +11,7 @@ const dal = require("../../data/dal");
 const otpModel = require("../../data/models/otp.model");
 const refreshTokenModel = require("../../data/models/refreshToken.model");
 const userModel = require("../../data/models/user.model");
+const model = require("../../data/models/user.model");
 
 const userSignup = async value => {
   const userData = await dal.findOne(userModel, { email: value.email });
@@ -64,7 +65,7 @@ const loginService = async value => {
   const userData = {
     userId: user._id,
     email: user.email,
-    userName: user.userName,
+    name: user.name,
   };
 
   const accessToken = generateAccessToken(userData);
@@ -104,7 +105,7 @@ const verifyService = async value => {
   const userData = {
     userId: user._id,
     email: user.email,
-    userName: user.userName,
+    name: user.name,
   };
   const accessToken = generateAccessToken(userData);
   const refreshToken = generateRefreshToken(userData);
@@ -144,9 +145,44 @@ const userDetailsService = async (userId, value) => {
     email: userData.email,
   };
 };
+
+const create = async (body) => {
+  return await dal.create(model, body);
+};
+
+const aggregate = async (query) => {
+  return await dal.aggregate(model, query);
+};
+
+const findOne = async (filter, projection = {}) => {
+  return await dal.findOne(model, filter, projection);
+}
+const upsert = async (filter, body) => {
+  return await dal.findOneAndUpsert(model, filter, body);
+}
+
+const find = async (filter, pagination, sort) => {
+  return await dal.find(model, filter, pagination, sort, {});
+};
+
+const update = async (filter, body) => {
+  return await dal.findOneAndUpdate(model, filter, body);
+};
+
+const deleteUser = async (id) => {
+  return await dal.findOneAndUpdate(model, { _id: id }, { active: false });
+}
+
 module.exports = {
   userSignup,
   loginService,
   verifyService,
   userDetailsService,
+  create,
+  aggregate,
+  findOne,
+  find,
+  upsert,
+  update,
+  deleteUser,
 };

@@ -11,8 +11,10 @@ const getConfig = () => {
       : "",
 
     S3_PUBLIC_BUCKET_NAME: process.env.S3_PUBLIC_BUCKET_NAME,
+    COOKIE_KEY: process.env.COOKIE_KEY,
     PORT: process.env.PORT ? Number(process.env.PORT) : undefined,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    F_END_BASE_URL: process.env.F_END_BASE_URL,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GOOGLE_CALLBACK_URL_LOCAL: process.env.GOOGLE_CALLBACK_URL_LOCAL
       ? process.env.GOOGLE_CALLBACK_URL_LOCAL

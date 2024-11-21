@@ -24,6 +24,10 @@ const userSchema = Schema(
     phoneNumber: {
       type: String,
     },
+    authType: {
+      type: String,
+      enum: ["google", "ios", "email", "phone"]
+    },
     status: {
       type: String,
       enum: ["active", "archieved", "in-active", "blocked"],
@@ -35,7 +39,9 @@ const userSchema = Schema(
     imageUrl: {
       type: String,
     },
-
+    googleKey: {
+      type: String,
+    },
     verifiedUser: {
       type: Boolean,
     },

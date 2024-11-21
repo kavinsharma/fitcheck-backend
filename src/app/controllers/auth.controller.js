@@ -1,3 +1,4 @@
+const config = require("../../config");
 const { ResponseMessages } = require("../../core/constants/cloud.constants");
 const {
   getErrorCode,
@@ -5,11 +6,14 @@ const {
 } = require("../../core/handlers/error.handlers");
 const errorHandlerMiddleware = require("../../core/handlers/mongooseError.handler");
 const { responseHandler } = require("../../core/handlers/response.handlers");
+const { generateAccessToken } = require("../../core/utils/utils");
 const {
   userSignup,
   loginService,
   verifyService,
   userDetailsService,
+  create,
+  upsert
 } = require("../service/auth.service");
 
 const register = async (req, res, next) => {
@@ -95,4 +99,41 @@ const verifyHash = async (req, res, next) => {
     return responseHandler(res, null, code, message);
   }
 };
-module.exports = { register, login, userDetails, verifyHash };
+
+const oauthCallback = async (req, res) => {
+  try {
+    const body = {
+      "name": req.user?.displayName,
+      status: "active",
+      emailVerified: true,
+      verifiedUser: true,
+      active: true,
+      imageUrl: req.user?.picture
+    }
+    const userInDb = await upsert({ email: req.user.email }, body);
+    const redirectUrl = await getUserRedirect(userInDb)
+    console.log("🚀 ~ oauthCallback ~ getUserRedirect(userInDb):", redirectUrl)
+    res.redirect(redirectUrl);
+  } catch (err) {
+    console.log("error", err);
+    res.redirect(getUserRedirect(null, err.message));
+  }
+};
+
+const getUserRedirect = async (userInDb, err = null) => {
+  if (err) {
+    return `${config.GOOGLE_CALLBACK_URL_UAT}/handleAuth?error=${err}`;
+  }
+  const body = { userId: userInDb._id, email: userInDb.email, name: userInDb.name }
+  token = generateAccessToken(body);
+  const response = {
+    message: "User Logged In Successfully",
+    data: userInDb,
+    error: null,
+    token: token,
+  };
+  return `${config.F_END_BASE_URL}?userToken=${token}&userId=${userInDb._id}&userEmail=${userInDb.email}&error=${response.error}`;
+};
+
+
+module.exports = { register, login, userDetails, verifyHash, oauthCallback };
