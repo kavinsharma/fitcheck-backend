@@ -8,12 +8,19 @@ const { sendEmail } = require("./sendEmail.middleware");
  * @param {Function} next - Express next middleware function
  */
 const emailMiddleware = async (req, res, next) => {
-  const { to, subject, text, html } = req.body;
+  const { to, subject, text, html } = req.email;
+  console.log(
+    "🚀 ~ emailMiddleware ~ to, subject, text, html:",
+    to,
+    subject,
+    text,
+    html,
+  );
 
   if (!to || !subject || !text) {
-    return res
-      .status(400)
-      .json({ message: "Missing required email fields: to, subject, text" });
+    return console.error({
+      message: "Missing required email fields: to, subject, text",
+    });
   }
 
   const mailOptions = {
@@ -26,11 +33,9 @@ const emailMiddleware = async (req, res, next) => {
 
   try {
     await sendEmail(mailOptions);
-    next(); // Continue to the next middleware or route
+    // next(); // Continue to the next middleware or route
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to send email", error: error.message });
+    console.error({ message: "Failed to send email", error: error.message });
   }
 };
 

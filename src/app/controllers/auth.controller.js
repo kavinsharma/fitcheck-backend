@@ -7,6 +7,8 @@ const {
 const errorHandlerMiddleware = require("../../core/handlers/mongooseError.handler");
 const { responseHandler } = require("../../core/handlers/response.handlers");
 const { generateAccessToken } = require("../../core/utils/utils");
+const { sendEmail } = require("../middleware/sendEmail.middleware");
+const emailMiddleware = require("../middleware/smtpEmail.middleware");
 const {
   userSignup,
   loginService,
@@ -21,13 +23,18 @@ const register = async (req, res, next) => {
     const value = req.value;
 
     const data = await userSignup(value);
-
+    req.email = {
+      to: data.email,
+      subject: `Register Verification Email Recieved!!`,
+      text: data.hash,
+    };
     responseHandler(
       res,
       { data },
       200,
       ResponseMessages.RES_MSG_USER_CODE_SENT_SUCCESSFULLY_EN,
     );
+    emailMiddleware(req, res, next);
   } catch (error) {
     const errorMongoose = errorHandlerMiddleware(error, res);
     let code = errorMongoose.statusCode;

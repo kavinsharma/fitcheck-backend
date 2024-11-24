@@ -1,4 +1,4 @@
-const transporter = require("./transporter");
+const { transporter } = require("../../core/scripts/smtp.scripts");
 
 const emailSender = async email => {
   try {

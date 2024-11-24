@@ -17,10 +17,13 @@ const {
 const { verify } = require("jsonwebtoken");
 const { verifyToken } = require("../middleware/verifyToken.js");
 const passport = require("passport");
+const emailMiddleware = require("../middleware/smtpEmail.middleware.js");
 
 const router = express.Router();
 
-router.route("/sign-up").post(validate(registerOneSchema), register);
+router
+  .route("/sign-up")
+  .post(validate(registerOneSchema), register, emailMiddleware);
 router
   .route("/user-details")
   .post(verifyToken, validate(registerTwoSchema), userDetails);
@@ -86,7 +89,7 @@ router.route("/apple/callback").get(
     session: false,
     failureRedirect: "/login",
   }),
-  oautAppleCallback(),
+  // oautAppleCallback(),
 );
 
 module.exports = router;
