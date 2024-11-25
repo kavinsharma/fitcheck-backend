@@ -13,6 +13,11 @@ const BrandMasterSchema = new mongoose.Schema(
       required: false,
       trim: true,
     },
+    logoType: {
+      type: String,
+      enum: ["rectangle", "square"],
+    },
+
     description: {
       type: String,
       required: false,
