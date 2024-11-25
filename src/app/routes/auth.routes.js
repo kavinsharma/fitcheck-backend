@@ -12,14 +12,18 @@ const {
   userDetails,
   verifyHash,
   oauthCallback,
+  oautAppleCallback,
 } = require("../controllers/auth.controller");
 const { verify } = require("jsonwebtoken");
 const { verifyToken } = require("../middleware/verifyToken.js");
 const passport = require("passport");
+const emailMiddleware = require("../middleware/smtpEmail.middleware.js");
 
 const router = express.Router();
 
-router.route("/sign-up").post(validate(registerOneSchema), register);
+router
+  .route("/sign-up")
+  .post(validate(registerOneSchema), register, emailMiddleware);
 router
   .route("/user-details")
   .post(verifyToken, validate(registerTwoSchema), userDetails);
@@ -55,6 +59,37 @@ router.route("/google/callback").get(
     failureRedirect: "/login",
   }),
   oauthCallback,
+);
+
+router.route("/apple").get(function (req, res, next) {
+  passport.authenticate(
+    "apple",
+    {
+      scope: ["name", "email"], // Apple provides limited scopes
+    },
+    function (err, user, info) {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.redirect("/apple");
+      }
+      req.logIn(user, function (err) {
+        if (err) {
+          return next(err);
+        }
+        return res.redirect("/profile");
+      });
+    },
+  )(req, res, next);
+});
+
+router.route("/apple/callback").get(
+  passport.authenticate("apple", {
+    session: false,
+    failureRedirect: "/login",
+  }),
+  // oautAppleCallback(),
 );
 
 module.exports = router;

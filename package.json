@@ -30,10 +30,12 @@
     "mongoose": "^8.8.0",
     "morgan-body": "^2.6.9",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.16",
     "nodemon": "^3.1.7",
-    "path": "^0.12.7",
     "passport": "^0.7.0",
+    "passport-apple": "^2.0.2",
     "passport-google-oauth2": "^0.2.0",
+    "path": "^0.12.7",
     "prettier": "^3.3.3"
   }
 }

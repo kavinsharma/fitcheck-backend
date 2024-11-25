@@ -60,7 +60,7 @@ const userSignup = async value => {
     userId: user.userId,
     deviceToken: deviceDetails.deviceToken,
     name: user.name,
-    hash: baseUrl + create.hash,
+    hash: baseUrl + "/?hash=" + create.hash,
     purpose: Purpose.SIGNUP,
     email: user.email,
   };

@@ -1,3 +1,5 @@
+const { transporter } = require("../../core/scripts/smtp.scripts");
+
 const emailSender = async email => {
   try {
     AWS.config.update(config.get("AWS_SES"));
@@ -28,4 +30,20 @@ const emailSender = async email => {
   }
 };
 
-module.exports = { emailSender };
+/**
+ * Sends an email with the given options
+ * @param {Object} mailOptions - The email options
+ * @returns {Promise} Resolves with the response info or rejects with an error
+ */
+const sendEmail = async mailOptions => {
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent:", info.response);
+    return info;
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
+  }
+};
+
+module.exports = { emailSender, sendEmail };

@@ -31,6 +31,14 @@ const getConfig = () => {
     SEED_ADMIN_PASSWORD: process.env.SEED_ADMIN_PASSWORD,
     SERPAPI_SECRET_KEY: process.env.SERPAPI_SECRET_KEY,
     SERPAPI_BASE_URL: process.env.SERPAPI_BASE_URL,
+    APPLE_CLIENT_I: process.env.APPLE_CLIENT_ID,
+    APPLE_TEAM_ID: process.env.APPLE_TEAM_ID,
+    APPLE_KEY_ID: process.env.APPLE_KEY_ID,
+    APPLE_PRIVATE_KEY: process.env.APPLE_PRIVATE_KEY,
+    APPLE_CALLBACK_URL: process.env.APPLE_CALLBACK_URL,
+    STMP_EMAIL: process.env.STMP_EMAIL,
+    STMP_PASSWORD: process.env.STMP_PASSWORD,
+    STMP_APP_CODE: process.env.STMP_APP_CODE,
   };
 };
 
