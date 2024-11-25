@@ -77,6 +77,11 @@ const loginService = async value => {
     throw new CustomError(ResponseMessages.RES_MSG_USER_NOT_FOUND_EN, "400");
   }
 
+  const flag = await compareHash(value.password, user.password);
+  if (!flag) {
+    throw new CustomError(ResponseMessages.RES_MSG_INVALID_PASSWORD, "400");
+  }
+
   const userData = {
     userId: user._id,
     email: user.email,
