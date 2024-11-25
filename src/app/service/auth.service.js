@@ -7,6 +7,7 @@ const {
   generateOtpCode,
   generateAccessToken,
   generateRefreshToken,
+  compareHash,
 } = require("../../core/utils/utils");
 const dal = require("../../data/dal");
 const DeviceModel = require("../../data/models/device.model");
