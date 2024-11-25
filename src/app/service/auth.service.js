@@ -73,6 +73,12 @@ const loginService = async value => {
     email: value.email,
     emailVerified: true,
   });
+  if (!user?.password) {
+    throw new CustomError(
+      ResponseMessages.RES_MSG_USER_PASSWORD_NOT_SET,
+      "400",
+    );
+  }
 
   if (!user) {
     throw new CustomError(ResponseMessages.RES_MSG_USER_NOT_FOUND_EN, "400");
