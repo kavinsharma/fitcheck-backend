@@ -89,7 +89,7 @@ router.route("/apple/callback").get(
     session: false,
     failureRedirect: "/login",
   }),
-  // oautAppleCallback(),
+  oautAppleCallback,
 );
 
 module.exports = router;

@@ -147,7 +147,7 @@ const getUserRedirect = async (userInDb, err = null) => {
 const oautAppleCallback = async (req, res) => {
   try {
     const body = {
-      name: req.user?.name || req.user?.email.split("@")[0],
+      name: req?.user?.name || req?.user?.email.split("@")[0],
       status: "active",
       authType: "ios",
       emailVerified: true,
