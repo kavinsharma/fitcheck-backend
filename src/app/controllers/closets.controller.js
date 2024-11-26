@@ -61,9 +61,13 @@ const comapare = async (req, res, next) => {
   }
 };
 
-const getCloset = async () => {
+const getCloset = async (req,res,next
+) => {
   try {
-    const data = await getClosetService();
+    const userId= req.userData?.userId
+    const deviceToken= req.userData.deviceToken
+    const data = await getClosetService({deviceToken:deviceToken,userId:userId});
+    responseHandler(res,{data},200,ResponseMessages.OK)
   } catch (error) {
     const errorMongoose = errorHandlerMiddleware(error, res);
     let code = errorMongoose.statusCode;

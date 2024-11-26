@@ -42,7 +42,7 @@ const compareService = async value => {
     {},
     { productId: 1, imageUrl: 1, userImage: 1, _id: 0 },
   );
-  console.log("🚀 ~ compareService ~ data:", data);
+
   if (!data) {
     throw new CustomError("product Not present", "400");
   }
@@ -50,6 +50,11 @@ const compareService = async value => {
   return data;
 };
 
-const getClosetService = () => {};
+const getClosetService =  async(filter) => {
+
+
+  const data = await dal.find(ClosetModel,{$or:[{userId:filter.userId},{productId:filter.productId}]})
+  return data 
+};
 
 module.exports = { closetService, compareService, getClosetService };
