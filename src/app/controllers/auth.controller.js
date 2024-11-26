@@ -16,6 +16,8 @@ const {
   userDetailsService,
   create,
   upsert,
+  forgetService,
+  createService,
 } = require("../service/auth.service");
 
 const register = async (req, res, next) => {
@@ -95,6 +97,51 @@ const verifyHash = async (req, res, next) => {
 
     const data = await verifyService(value);
     responseHandler(res, data, 200, "User Verfied ");
+  } catch (error) {
+    const errorMongoose = errorHandlerMiddleware(error, res);
+    let code = errorMongoose.statusCode;
+    let message = errorMongoose.msg;
+    code = getErrorCode(error);
+    message = getErrorMessage(error);
+    return responseHandler(res, null, code, message);
+  }
+};
+const forgetPassword = async (req, res, next) => {
+  try {
+    const value = req.value;
+    const data = await forgetService(value);
+    req.email = {
+      to: data.email,
+      subject: `Forget Password: Follow the url!!!`,
+      text: data.hash,
+    };
+    responseHandler(
+      res,
+      { data },
+      200,
+      ResponseMessages.RES_MSG_USER_CODE_SENT_SUCCESSFULLY_EN,
+    );
+    emailMiddleware(req, res, next);
+  } catch (error) {
+    const errorMongoose = errorHandlerMiddleware(error, res);
+    let code = errorMongoose.statusCode;
+    let message = errorMongoose.msg;
+    code = getErrorCode(error);
+    message = getErrorMessage(error);
+    return responseHandler(res, null, code, message);
+  }
+};
+const createPassword = async (req, res, next) => {
+  try {
+    const userId = req.userData.userId;
+    const value = req.value;
+    const data = await createService(value, userId);
+    responseHandler(
+      res,
+      { data },
+      200,
+      ResponseMessages.RES_MSG_USER_PASSWORD_UPDATED_SUCCESSFULLY_EN,
+    );
   } catch (error) {
     const errorMongoose = errorHandlerMiddleware(error, res);
     let code = errorMongoose.statusCode;
@@ -197,4 +244,6 @@ module.exports = {
   verifyHash,
   oauthCallback,
   oautAppleCallback,
+  createPassword,
+  forgetPassword,
 };

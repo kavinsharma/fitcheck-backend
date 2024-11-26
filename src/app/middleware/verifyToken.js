@@ -9,7 +9,14 @@ const {
 
 const verifyToken = async (req, res, next) => {
   try {
+    const deviceToken = req.header("deviceToken");
     const token = req.header("access-token")?.replace("Bearer", "").trim();
+
+    if (deviceToken) {
+      req.userData = { deviceToken };
+      return next();
+    }
+
     if (!token) {
       throw new CustomError(
         "Invalid token",
@@ -17,10 +24,8 @@ const verifyToken = async (req, res, next) => {
       );
     }
 
-    const data = decodeUserToken(token);
-    req.userData = data;
-
-    if (!req.userData) {
+    const decodedData = decodeUserToken(token);
+    if (!decodedData) {
       return responseHandler(
         res,
         null,
@@ -29,6 +34,7 @@ const verifyToken = async (req, res, next) => {
       );
     }
 
+    req.userData = decodedData;
     next();
   } catch (error) {
     const code = getErrorCode(error);

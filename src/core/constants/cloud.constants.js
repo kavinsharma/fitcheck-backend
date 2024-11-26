@@ -218,4 +218,8 @@ exports.ResponseMessages = Object.freeze({
   LOOP_DETECTED: "LOOP_DETECTED",
   NOT_EXTENDED: "NOT_EXTENDED",
   NETWORK_AUTHENTICATION_REQUIRED: "NETWORK_AUTHENTICATION_REQUIRED",
+
+  /// closet
+
+  RES_USER_PRODUCT_ALREADY_EXISTS: "Already Present in the closet!!",
 });

@@ -5,6 +5,8 @@ const {
   registerOneSchema,
   loginSchema,
   registerTwoSchema,
+  forgetPasswordSchema,
+  createPasswordSchema,
 } = require("../../data/validationSchema/userSchema.validator.js");
 const {
   register,
@@ -13,6 +15,8 @@ const {
   verifyHash,
   oauthCallback,
   oautAppleCallback,
+  forgetPassword,
+  createPassword,
 } = require("../controllers/auth.controller");
 const { verify } = require("jsonwebtoken");
 const { verifyToken } = require("../middleware/verifyToken.js");
@@ -29,6 +33,13 @@ router
   .post(verifyToken, validate(registerTwoSchema), userDetails);
 router.route("/login").post(validate(loginSchema), login);
 
+router
+  .route("/forget-password")
+  .post(validate(forgetPasswordSchema), forgetPassword, emailMiddleware);
+
+router
+  .route("/reset-password")
+  .post(verifyToken, validate(createPasswordSchema), createPassword);
 router.route("/verify").get(verifyHash);
 router.route("/google").get(function (req, res, next) {
   passport.authenticate(

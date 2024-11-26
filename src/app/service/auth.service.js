@@ -15,7 +15,7 @@ const otpModel = require("../../data/models/otp.model");
 const refreshTokenModel = require("../../data/models/refreshToken.model");
 const userModel = require("../../data/models/user.model");
 const model = require("../../data/models/user.model");
-
+const baseUrl = config.F_END_BASE_URL;
 const userSignup = async value => {
   const userData = await dal.findOne(userModel, { email: value.email });
   if (userData?.email && userData?.emailVerified) {
@@ -192,6 +192,50 @@ const userDetailsService = async (userId, value) => {
   };
 };
 
+const forgetService = async value => {
+  const user = await dal.findOne(userModel, { email: value.email });
+  if (!user) {
+    throw new CustomError(ResponseMessages.RES_MSG_USER_NOT_FOUND_EN, "400");
+  }
+
+  const otp = generateOtpCode();
+
+  value.hash = await generateHash(otp);
+  value.code = otp;
+
+  const baseUrl = config.F_END_BASE_URL;
+  const create = await dal.create(otpModel, {
+    userId: user._id,
+    hash: value.hash,
+    code: value.code,
+    email: user.email,
+    purpose: Purpose.FORGET_PASSWORD,
+  });
+  const response = {
+    name: user.name,
+    hash: baseUrl + "/?hash=" + create.hash,
+    purpose: Purpose.FORGET_PASSWORD,
+    email: user.email,
+  };
+  return response;
+};
+const createService = async (value, userId) => {
+  const user = await dal.findOne(userModel, { email: value.email });
+  if (!user) {
+    throw new CustomError(ResponseMessages.RES_MSG_USER_NOT_FOUND_EN, "400");
+  }
+  let user_email = value.email;
+  delete value.email;
+  value.password = await generateHash(value.password);
+  const response = await dal.findOneAndUpsert(
+    userModel,
+    { email: user_email },
+    value,
+  );
+  return {
+    email: response.email,
+  };
+};
 const create = async body => {
   return await dal.create(model, body);
 };
@@ -231,4 +275,6 @@ module.exports = {
   upsert,
   update,
   deleteUser,
+  forgetService,
+  createService,
 };
