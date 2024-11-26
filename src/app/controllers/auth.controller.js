@@ -73,11 +73,11 @@ const login = async (req, res, next) => {
   try {
     const value = req.value;
 
-    const userData = await loginService(value);
+    const data = await loginService(value);
 
     responseHandler(
       res,
-      userData,
+      data,
       200,
       ResponseMessages.RES_MSG_USER_LOGIN_SUCCESSFULLY_EN,
     );

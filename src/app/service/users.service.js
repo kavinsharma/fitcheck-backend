@@ -1,0 +1,79 @@
+const dal = require("../../data/dal/index");
+const { ResponseMessages } = require("../../core/constants/cloud.constants");
+const { CustomError } = require("../../core/handlers/error.handlers");
+const userModel = require("../../data/models/user.model");
+const DeviceModelModel = require("../../data/models/device.model");
+
+const {
+  BasicDetailsModel,
+} = require("../../data/models/userBasicDetails.model");
+const DeviceModel = require("../../data/models/device.model");
+const getProfileService = async (userId, deviceToken) => {
+  const device = await dal.findOne(DeviceModel, { deviceToken: deviceToken });
+  const data = await dal.findOne(BasicDetailsModel, {
+    $or: [{ userId: userId }, { deviceId: device._id }],
+  });
+  let userData;
+  if (userId) {
+    userData = await dal.findByID(userModel, { _id: userId });
+  }
+
+  return {
+    name: userData?.name,
+    profileImage: data.profileImage,
+    priceRange: data.priceRange,
+    fashionType: data.fashionType,
+    age: data.age,
+    size: data.size,
+    membership: data.membership,
+    brands: data.brands,
+    styleType: data.styleType,
+  };
+};
+
+const basicDetailsService = async (value, userId, deviceToken) => {
+  let deviceData = {};
+  let userData = {};
+  if (deviceToken) {
+    deviceData = await dal.findOne(DeviceModel, {
+      deviceToken: deviceToken,
+    });
+    value.deviceId = deviceData._id;
+    if (!deviceData) {
+      throw new CustomError(ResponseMessages.RES_MSG_USER_NOT_FOUND_EN, "400");
+    }
+  }
+
+  if (userId) {
+    userData = await dal.findOne(userModel, { _id: userId });
+    if (value.name) {
+      userData = await dal.findOneAndUpsert(
+        userModel,
+        { _id: userId },
+        { name: value.name },
+      );
+      value.userId = userData._id;
+    }
+    if (!userData) {
+      throw new CustomError(ResponseMessages.RES_MSG_USER_NOT_FOUND_EN, "400");
+    }
+  }
+
+  const data = await dal.findOneAndUpsert(
+    BasicDetailsModel,
+    {
+      $or: [{ deviceId: deviceData._id }, { userId: userData._id }],
+    },
+    value,
+  );
+
+  return {
+    name: userData?.name,
+    sytleType: data.sytleType,
+    size: data.size,
+    age: data.age,
+    profileImage: data.profileImage,
+  };
+};
+
+module.exports = { basicDetailsService, getProfileService };

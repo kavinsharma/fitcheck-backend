@@ -164,10 +164,11 @@ const verifyService = async value => {
     { userId: user._id },
     refreshBody,
   );
+  const data = { ...userData };
 
   return {
     accessToken: accessToken,
-    userData,
+    data,
   };
 };
 
