@@ -28,10 +28,30 @@ const loginSchema = Joi.object({
   long: Joi.number(),
 });
 
+const basicUserSchema = Joi.object({
+  deviceToken: Joi.string(),
+  deviceUid: Joi.string(),
+  lat: Joi.number(),
+  long: Joi.number(),
+});
+
+const userDetailsSchema = Joi.object({
+  priceRange: Joi.string(),
+  name: Joi.string(),
+  profileImage: Joi.string().uri(),
+  fashionType: Joi.string(),
+  age: Joi.number().integer().min(0),
+  size: Joi.string().valid("XS", "S", "M", "L", "XL", "XXL"),
+  brands: Joi.string(),
+  styleType: Joi.string(),
+});
+
 module.exports = {
   registerOneSchema,
   loginSchema,
   registerTwoSchema,
   forgetPasswordSchema,
   createPasswordSchema,
+  basicUserSchema,
+  userDetailsSchema,
 };
