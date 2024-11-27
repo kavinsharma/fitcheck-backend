@@ -40,7 +40,7 @@ router
 router
   .route("/reset-password")
   .post(verifyToken, validate(createPasswordSchema), createPassword);
-router.route("/verify").get(verifyHash);
+router.route("/verify").post(verifyHash);
 router.route("/google").get(function (req, res, next) {
   passport.authenticate(
     "google",
