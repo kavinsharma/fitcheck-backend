@@ -9,6 +9,7 @@ const brandRouter = require("./brandMaster.routes.js");
 const sizeRouter = require("./sizeMaster.routes.js");
 const styleTypeRouter = require("./styleType.routes.js");
 const closetRouter = require("./closets.routes.js");
+const userRouter = require("./users.routes.js");
 const router = express.Router();
 router.use("/product", productRouter);
 router.use("/auth", authRouter);
@@ -16,6 +17,7 @@ router.use("/brand", brandRouter);
 router.use("/size-guide-master", sizeRouter);
 router.use("/style-type-master", styleTypeRouter);
 router.use("/closets", closetRouter);
+router.use("/profile", userRouter);
 
 router.use("/upload", uploadRouter);
 router.get("/hello-world", async (req, res, next) => {

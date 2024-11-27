@@ -26,7 +26,7 @@ const userSchema = Schema(
     },
     authType: {
       type: String,
-      enum: ["google", "ios", "email", "phone"]
+      enum: ["google", "ios", "email", "phone"],
     },
     status: {
       type: String,

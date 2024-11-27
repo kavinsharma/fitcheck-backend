@@ -11,31 +11,55 @@ const verifyToken = async (req, res, next) => {
   try {
     const deviceToken = req.header("deviceToken");
     const token = req.header("access-token")?.replace("Bearer", "").trim();
+    console.log("🚀 ~ verifyToken ~ token:", token);
+
+    if (token && deviceToken) {
+      const decodedData = decodeUserToken(token);
+
+      if (!decodedData) {
+        return responseHandler(
+          res,
+          null,
+          401,
+          ResponseMessages.RES_MSG_INVALID_TOKEN_EN,
+        );
+      }
+
+      req.userData = { ...decodedData, deviceToken: deviceToken };
+
+      return next();
+    }
 
     if (deviceToken) {
       req.userData = { deviceToken };
       return next();
     }
 
+    if (token) {
+      console.log("jere there ");
+
+      const decodedData = decodeUserToken(token);
+      if (!decodedData) {
+        return responseHandler(
+          res,
+          null,
+          401,
+          "mohti bhai",
+          // ResponseMessages.RES_MSG_INVALID_TOKEN_EN,
+        );
+      }
+
+      req.userData = decodedData;
+      return next();
+    }
     if (!token) {
+      console.log("jere  ");
+
       throw new CustomError(
-        "Invalid token",
+        "Mohit token",
         ResponseMessages.RES_MSG_INVALID_TOKEN_EN,
       );
     }
-
-    const decodedData = decodeUserToken(token);
-    if (!decodedData) {
-      return responseHandler(
-        res,
-        null,
-        401,
-        ResponseMessages.RES_MSG_INVALID_TOKEN_EN,
-      );
-    }
-
-    req.userData = decodedData;
-    next();
   } catch (error) {
     const code = getErrorCode(error);
     const message = getErrorMessage(error);
