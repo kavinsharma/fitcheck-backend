@@ -5,6 +5,7 @@ const upload = multer();
 const {
   upload: uploadController,
 } = require("../controllers/upload.controller");
+const { verifyToken } = require("../middleware/verifyToken");
 
 router.route("/").post(upload.single("files"), uploadController);
 
