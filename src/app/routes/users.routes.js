@@ -4,6 +4,8 @@ const { verifyToken } = require("../middleware/verifyToken.js");
 const {
   basicUserDetails,
   getProfile,
+  updateStyleType,
+  updateBrandType,
 } = require("../controllers/users.controller.js");
 const router = express.Router();
 const validate = require("../middleware/validator.js");
@@ -17,5 +19,8 @@ router
 router
   .route("/edit")
   .post(verifyToken, validate(userDetailsSchema), basicUserDetails);
+
+router.route("/update-style-type").post(verifyToken, updateStyleType);
+router.route("/update-brands").post(verifyToken, updateBrandType);
 
 module.exports = router;

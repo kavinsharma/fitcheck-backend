@@ -2,7 +2,6 @@ const dal = require("../../data/dal/index");
 const { ResponseMessages } = require("../../core/constants/cloud.constants");
 const { CustomError } = require("../../core/handlers/error.handlers");
 const userModel = require("../../data/models/user.model");
-const DeviceModelModel = require("../../data/models/device.model");
 
 const {
   BasicDetailsModel,
@@ -76,4 +75,69 @@ const basicDetailsService = async (value, userId, deviceToken) => {
   };
 };
 
-module.exports = { basicDetailsService, getProfileService };
+const styleUpdateService = async (userId, deviceToken, value) => {
+  let deviceData = {};
+  if (deviceToken) {
+    deviceData = await dal.findOne(DeviceModel, { deviceToken: deviceToken });
+  }
+  const check = await dal.findOne(BasicDetailsModel, {
+    $or: [{ deviceToken: deviceData }, { userId: userId }],
+  });
+  let data = {};
+
+  if (check) {
+    let newStyleTypes = value.styleType.split(",").map(style => style.trim());
+
+    let currentStyleTypes = check.styleType || [];
+
+    const combinedStyleTypes = [
+      ...new Set([...newStyleTypes, ...currentStyleTypes]),
+    ];
+
+    const finalStyleTypes = combinedStyleTypes.slice(0, 3);
+
+    data = await dal.findOneAndUpsert(
+      BasicDetailsModel,
+      { _id: check._id },
+      { $set: { styleType: finalStyleTypes } },
+    );
+  }
+
+  return { styleType: data.styleType };
+};
+
+const brandUpdateService = async (userId, deviceToken, value) => {
+  let deviceData = {};
+  if (deviceToken) {
+    deviceData = await dal.findOne(DeviceModel, { deviceToken: deviceToken });
+  }
+  const check = await dal.findOne(BasicDetailsModel, {
+    $or: [{ deviceToken: deviceData }, { userId: userId }],
+  });
+  let data = {};
+
+  if (check) {
+    let newBrand = value.brands.split(",").map(brand => brand.trim());
+
+    let currentBrand = check.brands || [];
+
+    const combinedBrands = [...new Set([...newBrand, ...currentBrand])];
+
+    const finalBrand = combinedBrands.slice(0, 5);
+
+    data = await dal.findOneAndUpsert(
+      BasicDetailsModel,
+      { _id: check._id },
+      { $set: { brands: finalBrand } },
+    );
+  }
+
+  return { brands: data.brands };
+};
+
+module.exports = {
+  basicDetailsService,
+  getProfileService,
+  styleUpdateService,
+  brandUpdateService,
+};
