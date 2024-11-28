@@ -1,6 +1,6 @@
 const { ResponseMessages } = require("../../core/constants/cloud.constants");
 const { responseHandler } = require("../../core/handlers/response.handlers");
-const service = require("../service/brands.service");
+const service = require("../service/styleTypeMaster.service");
 const { search } = require("../../data/query/general.query");
 exports.create = async (req, res, next) => {
   try {
@@ -69,9 +69,7 @@ exports.getList = async (req, res, next) => {
       };
     }
 
-    console.log("🚀 ~ exports.getList= ~ filter:", filter);
     const queries = search(filter, pagination);
-    console.log("🚀 ~ exports.getList= ~ queries:", queries);
 
     let response = await service.search(queries);
 
