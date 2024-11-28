@@ -120,6 +120,9 @@ exports.ResponseMessages = Object.freeze({
 
   //////////////////////////////
 
+  // Family
+  RES_MSG_NEW_PROFILE_ADDED_SUCCESSFULLY_EN: "Family member added successfully",
+
   // user
   RES_MSG_USER_PASSWORD_NOT_SET: "Create user detials!!!",
   RES_MSG_USER_CREATED_SUCCESSFULLY_EN: "User created successfully.",
