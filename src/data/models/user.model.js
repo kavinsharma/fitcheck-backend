@@ -10,6 +10,9 @@ const userSchema = Schema(
       type: String,
       require: "Name is required",
     },
+    dob: {
+      type: String,
+    },
     email: {
       type: String,
       lowercase: true,

@@ -36,16 +36,13 @@ const verifyToken = async (req, res, next) => {
     }
 
     if (token) {
-      console.log("jere there ");
-
       const decodedData = decodeUserToken(token);
       if (!decodedData) {
         return responseHandler(
           res,
           null,
           401,
-          "mohti bhai",
-          // ResponseMessages.RES_MSG_INVALID_TOKEN_EN,
+          ResponseMessages.RES_MSG_INVALID_TOKEN_EN,
         );
       }
 
@@ -53,8 +50,6 @@ const verifyToken = async (req, res, next) => {
       return next();
     }
     if (!token) {
-      console.log("jere  ");
-
       throw new CustomError(
         "Mohit token",
         ResponseMessages.RES_MSG_INVALID_TOKEN_EN,

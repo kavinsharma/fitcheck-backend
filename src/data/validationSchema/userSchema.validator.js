@@ -46,6 +46,13 @@ const userDetailsSchema = Joi.object({
   styleType: Joi.string(),
 });
 
+const accountDetailsSchema = Joi.object({
+  name: Joi.string(),
+  // email: Joi.email().trim(),
+  dob: Joi.string(),
+  // password: Joi.string(),
+});
+
 module.exports = {
   registerOneSchema,
   loginSchema,
@@ -54,4 +61,5 @@ module.exports = {
   createPasswordSchema,
   basicUserSchema,
   userDetailsSchema,
+  accountDetailsSchema,
 };
