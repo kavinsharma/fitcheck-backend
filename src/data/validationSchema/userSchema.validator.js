@@ -65,6 +65,15 @@ const deleteSchema = Joi.object({
   password: Joi.string().trim().required(),
 });
 
+const familySchema = Joi.object({
+  age: Joi.string(),
+  fashionType: Joi.string(),
+  brands: Joi.string(),
+  styleType: Joi.string(),
+  priceRange: Joi.string(),
+  name: Joi.string().required(),
+});
+
 module.exports = {
   registerOneSchema,
   loginSchema,
@@ -76,4 +85,5 @@ module.exports = {
   accountDetailsSchema,
   deleteSchema,
   emailEmailChange,
+  familySchema,
 };
