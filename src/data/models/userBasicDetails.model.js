@@ -25,6 +25,10 @@ const userBasicSchema = Schema(
     size: {
       type: String,
     },
+    family: {
+      type: Boolean,
+      default: false,
+    },
     membership: {
       type: Boolean,
       default: false,
@@ -33,10 +37,22 @@ const userBasicSchema = Schema(
       type: Schema.ObjectId,
     },
     brands: {
-      type: [String], // here we will store id's
+      type: [String],
+      validate: {
+        validator: function (value) {
+          return value.length <= 5;
+        },
+        message: "You can add  at most 5 brands.",
+      },
     },
     styleType: {
-      type: [String], // here we will store id's
+      type: [String],
+      validate: {
+        validator: function (value) {
+          return value.length <= 3;
+        },
+        message: "You can add  at most 3 Stype Types.",
+      },
     },
   },
   {

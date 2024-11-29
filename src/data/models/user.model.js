@@ -40,6 +40,9 @@ const userSchema = Schema(
     password: {
       type: String,
     },
+    family: {
+      type: Boolean,
+    },
     imageUrl: {
       type: String,
     },
