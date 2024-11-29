@@ -7,6 +7,8 @@ const {
   BasicDetailsModel,
 } = require("../../data/models/userBasicDetails.model");
 const DeviceModel = require("../../data/models/device.model");
+const { familyModel } = require("../../data/models/family.model");
+
 const getProfileService = async (userId, deviceToken) => {
   const device = await dal.findOne(DeviceModel, { deviceToken: deviceToken });
   const data = await dal.findOne(BasicDetailsModel, {
@@ -151,10 +153,34 @@ const accountDetailsService = async (userId, value) => {
   return { name: value.name, dob: value.dob };
 };
 
+const addMemberService = async (value, userId) => {
+  const user = await dal.findOneAndUpdate(
+    userModel,
+    { _id: userId },
+    { family: true },
+  );
+  if (!user) {
+    throw new CustomError(ResponseMessages.RES_MSG_USER_NOT_FOUND_EN, "400");
+  }
+  const data = await dal.create(familyModel, {
+    userId: userId,
+    name: value.name,
+  });
+  value.userId = data._id;
+  let styleType = value.styleType.split(",").slice(0, 3);
+  let brands = value.brands.split(",").slice(0, 5);
+  value.styleType = styleType;
+  value.brands = brands;
+  const response = await dal.create(BasicDetailsModel, value);
+
+  return { name: data.name, userId: response.userId };
+};
+
 module.exports = {
   basicDetailsService,
   getProfileService,
   styleUpdateService,
   brandUpdateService,
   accountDetailsService,
+  addMemberService,
 };
