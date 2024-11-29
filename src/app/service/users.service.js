@@ -135,9 +135,26 @@ const brandUpdateService = async (userId, deviceToken, value) => {
   return { brands: data.brands };
 };
 
+const accountDetailsService = async (userId, value) => {
+  let deviceData = {};
+  if (!userId) {
+    deviceData = await dal.findOne(DeviceModel, { deviceToken: deviceToken });
+  }
+
+  const data = await dal.findOneAndUpsert(
+    userModel,
+    {
+      _id: userId,
+    },
+    { name: value.name, dob: value.dob },
+  );
+  return { name: value.name, dob: value.dob };
+};
+
 module.exports = {
   basicDetailsService,
   getProfileService,
   styleUpdateService,
   brandUpdateService,
+  accountDetailsService,
 };
