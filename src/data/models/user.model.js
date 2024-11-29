@@ -30,6 +30,7 @@ const userSchema = Schema(
     authType: {
       type: String,
       enum: ["google", "ios", "email", "phone"],
+      default: "email",
     },
     status: {
       type: String,
@@ -47,6 +48,12 @@ const userSchema = Schema(
     },
     verifiedUser: {
       type: Boolean,
+    },
+    deleteReason: {
+      type: String,
+    },
+    note: {
+      type: String,
     },
     active: {
       type: Boolean,

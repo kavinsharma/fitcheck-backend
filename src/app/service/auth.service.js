@@ -237,6 +237,48 @@ const createService = async (value, userId) => {
     email: response.email,
   };
 };
+
+const deleteService = async (value, userId) => {
+  const user = await dal.findOne(userModel, { _id: userId });
+  const flag = await compareHash(value.password, user.password);
+  if (!flag) {
+    throw new CustomError(ResponseMessages.RES_MSG_INVALID_PASSWORD, "400");
+  }
+
+  const data = await dal.findOneAndUpdate(
+    userModel,
+    { _id: userId },
+    {
+      emailVerified: false,
+      status: "archieved",
+      active: false,
+      deleteReason: value.deleteReason,
+      note: value.note,
+    },
+  );
+  return { email: user.email };
+};
+
+const emailChangeService = async value => {
+  const user = await dal.findOne(userModel, { email: value.oldEmail });
+  if (!user) {
+    throw new CustomError(ResponseMessages.RES_MSG_USER_NOT_FOUND_EN, "400");
+  }
+  const flag = await compareHash(value.password, user.password);
+  if (!flag) {
+    throw new CustomError(ResponseMessages.RES_MSG_INVALID_PASSWORD, "400");
+  }
+
+  const data = await dal.findOneAndUpdate(
+    userModel,
+    { email: value.oldEmail },
+    { email: value.newEmail },
+  );
+  return {
+    email: data.email,
+  };
+};
+
 const create = async body => {
   return await dal.create(model, body);
 };
@@ -278,4 +320,6 @@ module.exports = {
   deleteUser,
   forgetService,
   createService,
+  deleteService,
+  emailChangeService,
 };
