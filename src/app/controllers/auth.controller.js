@@ -18,6 +18,8 @@ const {
   upsert,
   forgetService,
   createService,
+  deleteService,
+  emailChangeService,
 } = require("../service/auth.service");
 
 const register = async (req, res, next) => {
@@ -152,6 +154,44 @@ const createPassword = async (req, res, next) => {
   }
 };
 
+const deleteProfile = async (req, res, next) => {
+  try {
+    const value = req.value;
+    console.log("🚀 ~ deleteProfile ~ value:", value);
+    const userId = req.userData.userId;
+    const data = await deleteService(value, userId);
+
+    responseHandler(
+      res,
+      { data },
+      200,
+      ResponseMessages.RES_MSG_USER_DELETED_SUCCESSFULLY_EN,
+    );
+  } catch (error) {
+    const errorMongoose = errorHandlerMiddleware(error, res);
+    let code = errorMongoose.statusCode;
+    let message = errorMongoose.msg;
+    code = getErrorCode(error);
+    message = getErrorMessage(error);
+    return responseHandler(res, null, code, message);
+  }
+};
+
+const emailChange = async (req, res, next) => {
+  try {
+    const value = req.value;
+
+    const data = await emailChangeService(value);
+    responseHandler(res, { data }, 200, "User Email changed");
+  } catch (error) {
+    const errorMongoose = errorHandlerMiddleware(error, res);
+    let code = errorMongoose.statusCode;
+    let message = errorMongoose.msg;
+    code = getErrorCode(error);
+    message = getErrorMessage(error);
+    return responseHandler(res, null, code, message);
+  }
+};
 const oauthCallback = async (req, res) => {
   try {
     const body = {
@@ -246,4 +286,6 @@ module.exports = {
   oautAppleCallback,
   createPassword,
   forgetPassword,
+  deleteProfile,
+  emailChange,
 };

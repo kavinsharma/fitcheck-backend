@@ -53,6 +53,18 @@ const accountDetailsSchema = Joi.object({
   // password: Joi.string(),
 });
 
+const emailEmailChange = Joi.object({
+  newEmail: Joi.string().email(),
+  oldEmail: Joi.string().email(),
+  password: Joi.string().trim(),
+});
+
+const deleteSchema = Joi.object({
+  deleteReason: Joi.string(),
+  note: Joi.string(),
+  password: Joi.string().trim().required(),
+});
+
 module.exports = {
   registerOneSchema,
   loginSchema,
@@ -62,4 +74,6 @@ module.exports = {
   basicUserSchema,
   userDetailsSchema,
   accountDetailsSchema,
+  deleteSchema,
+  emailEmailChange,
 };

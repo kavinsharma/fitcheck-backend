@@ -7,6 +7,8 @@ const {
   registerTwoSchema,
   forgetPasswordSchema,
   createPasswordSchema,
+  deleteSchema,
+  emailEmailChange,
 } = require("../../data/validationSchema/userSchema.validator.js");
 const {
   register,
@@ -17,6 +19,8 @@ const {
   oautAppleCallback,
   forgetPassword,
   createPassword,
+  deleteProfile,
+  emailChange,
 } = require("../controllers/auth.controller");
 const { verify } = require("jsonwebtoken");
 const { verifyToken } = require("../middleware/verifyToken.js");
@@ -40,6 +44,15 @@ router
 router
   .route("/reset-password")
   .post(verifyToken, validate(createPasswordSchema), createPassword);
+
+router
+  .route("/delete")
+  .delete(verifyToken, validate(deleteSchema), deleteProfile);
+
+router
+  .route("/change-email")
+  .post(verifyToken, validate(emailEmailChange), emailChange);
+
 router.route("/verify").post(verifyHash);
 router.route("/google").get(function (req, res, next) {
   passport.authenticate(
