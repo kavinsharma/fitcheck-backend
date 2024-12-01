@@ -36,8 +36,8 @@ const basicUserDetails = async (req, res, next) => {
     const value = req.value;
     const userId = req.userData?.userId;
     const deviceToken = req.userData?.deviceToken;
-    value.styleType = value.styleType.split(",");
-    value.brands = value.brands.split(",");
+    value.styleType = value?.styleType?.split(",");
+    value.brands = value?.brands?.split(",");
 
     const data = await basicDetailsService(value, userId, deviceToken);
     responseHandler(

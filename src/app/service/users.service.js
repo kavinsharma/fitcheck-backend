@@ -88,7 +88,7 @@ const styleUpdateService = async (userId, deviceToken, value) => {
   let data = {};
 
   if (check) {
-    let newStyleTypes = value.styleType.split(",").map(style => style.trim());
+    let newStyleTypes = value?.styleType?.split(",").map(style => style.trim());
 
     let currentStyleTypes = check.styleType || [];
 
@@ -119,7 +119,7 @@ const brandUpdateService = async (userId, deviceToken, value) => {
   let data = {};
 
   if (check) {
-    let newBrand = value.brands.split(",").map(brand => brand.trim());
+    let newBrand = value?.brands?.split(",").map(brand => brand.trim());
 
     let currentBrand = check.brands || [];
 
@@ -167,8 +167,8 @@ const addMemberService = async (value, userId) => {
     name: value.name,
   });
   value.userId = data._id;
-  let styleType = value.styleType.split(",").slice(0, 3);
-  let brands = value.brands.split(",").slice(0, 5);
+  let styleType = value?.styleType?.split(",").slice(0, 3);
+  let brands = value?.brands?.split(",").slice(0, 5);
   value.styleType = styleType;
   value.brands = brands;
   const response = await dal.create(BasicDetailsModel, value);
