@@ -48,7 +48,7 @@ const addCloset = async (req, res, next) => {
 const comapare = async (req, res, next) => {
   try {
     let value = req.query;
-    value = value.productId.split(",");
+    value = value.productId?.split(",");
     const data = await compareService(value);
     responseHandler(res, { data }, 200, "ok");
   } catch (error) {
@@ -61,13 +61,15 @@ const comapare = async (req, res, next) => {
   }
 };
 
-const getCloset = async (req,res,next
-) => {
+const getCloset = async (req, res, next) => {
   try {
-    const userId= req.userData?.userId
-    const deviceToken= req.userData.deviceToken
-    const data = await getClosetService({deviceToken:deviceToken,userId:userId});
-    responseHandler(res,{data},200,ResponseMessages.OK)
+    const userId = req.userData?.userId;
+    const deviceToken = req.userData.deviceToken;
+    const data = await getClosetService({
+      deviceToken: deviceToken,
+      userId: userId,
+    });
+    responseHandler(res, { data }, 200, ResponseMessages.OK);
   } catch (error) {
     const errorMongoose = errorHandlerMiddleware(error, res);
     let code = errorMongoose.statusCode;

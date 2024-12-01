@@ -67,7 +67,7 @@ exports.getList = async (req, res, next) => {
 
     if (queryFilter.id) {
       filter["_id"] = {
-        $in: queryFilter.id.split(",").map(el => ObjectId(el)),
+        $in: queryFilter.id?.split(",").map(el => ObjectId(el)),
       };
     }
 
