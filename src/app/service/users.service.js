@@ -36,13 +36,15 @@ const basicDetailsService = async (value, userId, deviceToken) => {
   let deviceData = {};
   let userData = {};
   if (deviceToken) {
-    deviceData = await dal.findOne(DeviceModel, {
-      deviceToken: deviceToken,
-    });
-    value.deviceId = deviceData._id;
-    if (!deviceData) {
-      throw new CustomError(ResponseMessages.RES_MSG_USER_NOT_FOUND_EN, "400");
-    }
+    deviceData = await dal.findOneAndUpsert(
+      DeviceModel,
+      {
+        deviceToken: deviceToken,
+      },
+      { deviceToken: deviceToken },
+    );
+
+    value.deviceId = deviceData?._id;
   }
 
   if (userId) {
@@ -54,9 +56,6 @@ const basicDetailsService = async (value, userId, deviceToken) => {
         { name: value.name },
       );
       value.userId = userData._id;
-    }
-    if (!userData) {
-      throw new CustomError(ResponseMessages.RES_MSG_USER_NOT_FOUND_EN, "400");
     }
   }
   let data = {};
@@ -70,7 +69,7 @@ const basicDetailsService = async (value, userId, deviceToken) => {
       value,
     );
   } else {
-    delete value.userId;
+    delete value?.deviceId;
     data = await dal.findOneAndUpsert(
       BasicDetailsModel,
 
