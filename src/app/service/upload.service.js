@@ -39,4 +39,5 @@ const uploadOtherService = async (buffer, uploadedFileName) => {
   const url = await uploadGeneralFile(buffer, uploadedFileName);
   return { url };
 };
+
 module.exports = { uploadService, uploadOtherService };

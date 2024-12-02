@@ -37,7 +37,6 @@ const upload = async (req, res, next) => {
 const uploadOtherUser = async (req, res, next) => {
   try {
     const buffer = req.file?.buffer;
-    const body = req.body;
     const uploadedFileName = req.file?.originalname || "fitcheck_data_file";
     if (!buffer) {
       return responseHandler(
@@ -48,7 +47,8 @@ const uploadOtherUser = async (req, res, next) => {
       );
     }
 
-    const data = await uploadOtherService(body, buffer, uploadedFileName);
+    const data = await uploadOtherService(buffer, uploadedFileName);
+    responseHandler(res, { data }, 200, ResponseMessages.OK);
   } catch (error) {
     console.log("error is ", error);
   }

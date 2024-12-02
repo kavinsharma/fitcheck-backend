@@ -4,6 +4,7 @@ const {
   brandUpdateService,
   accountDetailsService,
   addMemberService,
+  otherStyleUpdateService,
 } = require("../service/users.service");
 const { getProfileService } = require("../service/users.service");
 const errorHandlerMiddleware = require("../../core/handlers/mongooseError.handler");
@@ -139,6 +140,19 @@ const addMember = async (req, res, next) => {
   }
 };
 
+const updateOtherStyleType = async (req, res, next) => {
+  try {
+    const value = req.value;
+    const data = await otherStyleUpdateService(value);
+  } catch (error) {
+    const errorMongoose = errorHandlerMiddleware(error, res);
+    let code = errorMongoose.statusCode;
+    let message = errorMongoose.msg;
+    code = getErrorCode(error);
+    message = getErrorMessage(error);
+    return responseHandler(res, null, code, message);
+  }
+};
 module.exports = {
   getProfile,
   basicUserDetails,
@@ -146,4 +160,5 @@ module.exports = {
   updateBrandType,
   accountDetails,
   addMember,
+  updateOtherStyleType,
 };
