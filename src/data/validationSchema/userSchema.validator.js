@@ -67,6 +67,7 @@ const deleteSchema = Joi.object({
 
 const familySchema = Joi.object({
   age: Joi.string(),
+  profileImage: Joi.string(),
   fashionType: Joi.string(),
   brands: Joi.string(),
   styleType: Joi.string(),
