@@ -59,14 +59,26 @@ const basicDetailsService = async (value, userId, deviceToken) => {
       throw new CustomError(ResponseMessages.RES_MSG_USER_NOT_FOUND_EN, "400");
     }
   }
+  let data = {};
+  if (userData?._id) {
+    delete value.userId;
+    data = await dal.findOneAndUpsert(
+      BasicDetailsModel,
 
-  const data = await dal.findOneAndUpsert(
-    BasicDetailsModel,
-    {
-      $or: [{ deviceId: deviceData._id }, { userId: userData._id }],
-    },
-    value,
-  );
+      { userId: userData._id },
+
+      value,
+    );
+  } else {
+    delete value.userId;
+    data = await dal.findOneAndUpsert(
+      BasicDetailsModel,
+
+      { deviceId: deviceData._id },
+
+      value,
+    );
+  }
 
   return {
     name: userData?.name,
@@ -176,6 +188,33 @@ const addMemberService = async (value, userId) => {
   return { name: data.name, userId: response.userId };
 };
 
+const otherStyleUpdateService = async () => {
+  const check = await dal.findOne(familyModel, {
+    _id: userId,
+  });
+  let data = {};
+
+  if (check) {
+    let newStyleTypes = value?.styleType?.split(",").map(style => style.trim());
+
+    let currentStyleTypes = check.styleType || [];
+
+    const combinedStyleTypes = [
+      ...new Set([...newStyleTypes, ...currentStyleTypes]),
+    ];
+
+    const finalStyleTypes = combinedStyleTypes.slice(0, 3);
+
+    data = await dal.findOneAndUpsert(
+      BasicDetailsModel,
+      { _id: check._id },
+      { $set: { styleType: finalStyleTypes } },
+    );
+  }
+
+  return { styleType: data.styleType };
+};
+
 module.exports = {
   basicDetailsService,
   getProfileService,
@@ -183,4 +222,5 @@ module.exports = {
   brandUpdateService,
   accountDetailsService,
   addMemberService,
+  otherStyleUpdateService,
 };

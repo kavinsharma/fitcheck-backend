@@ -75,6 +75,11 @@ const familySchema = Joi.object({
   name: Joi.string().required(),
 });
 
+const memberStyleSchema = Joi.object({
+  styleTypes: Joi.string().required(),
+  profileId: Joi.string().required(),
+});
+
 module.exports = {
   registerOneSchema,
   loginSchema,
@@ -87,4 +92,5 @@ module.exports = {
   deleteSchema,
   emailEmailChange,
   familySchema,
+  memberStyleSchema,
 };
