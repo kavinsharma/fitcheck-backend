@@ -76,7 +76,11 @@ const familySchema = Joi.object({
 });
 
 const memberStyleSchema = Joi.object({
-  styleTypes: Joi.string().required(),
+  styleType: Joi.string().required(),
+  profileId: Joi.string().required(),
+});
+const memberBrandsSchema = Joi.object({
+  brands: Joi.string().required(),
   profileId: Joi.string().required(),
 });
 
@@ -93,4 +97,5 @@ module.exports = {
   emailEmailChange,
   familySchema,
   memberStyleSchema,
+  memberBrandsSchema,
 };

@@ -8,6 +8,7 @@ const {
   updateBrandType,
   addMember,
   updateOtherStyleType,
+  updateOtherBrands,
 } = require("../controllers/users.controller.js");
 const router = express.Router();
 const validate = require("../middleware/validator.js");
@@ -15,6 +16,7 @@ const {
   userDetailsSchema,
   familySchema,
   memberStyleSchema,
+  memberBrandsSchema,
 } = require("../../data/validationSchema/userSchema.validator.js");
 router.route("/").get(verifyToken, getProfile);
 router
@@ -32,7 +34,11 @@ router
   .route("/add-member")
   .post(verifyToken, validate(familySchema), addMember);
 router
-  .route("member-styles")
+  .route("/member-styles")
   .post(verifyToken, validate(memberStyleSchema), updateOtherStyleType);
+
+router
+  .route("/member-brands")
+  .post(verifyToken, validate(memberBrandsSchema), updateOtherBrands);
 
 module.exports = router;

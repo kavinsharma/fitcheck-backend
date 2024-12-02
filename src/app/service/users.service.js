@@ -187,31 +187,54 @@ const addMemberService = async (value, userId) => {
   return { name: data.name, userId: response.userId };
 };
 
-const otherStyleUpdateService = async () => {
-  const check = await dal.findOne(familyModel, {
-    _id: userId,
+const otherStyleUpdateService = async value => {
+  const check = await dal.findOne(BasicDetailsModel, {
+    userId: value.profileId,
   });
   let data = {};
 
-  if (check) {
-    let newStyleTypes = value?.styleType?.split(",").map(style => style.trim());
+  let newStyleTypes = value?.styleType?.split(",").map(style => style.trim());
 
-    let currentStyleTypes = check.styleType || [];
+  let currentStyleTypes = check?.styleType || [];
 
-    const combinedStyleTypes = [
-      ...new Set([...newStyleTypes, ...currentStyleTypes]),
-    ];
+  const combinedStyleTypes = [
+    ...new Set([...newStyleTypes, ...currentStyleTypes]),
+  ];
 
-    const finalStyleTypes = combinedStyleTypes.slice(0, 3);
+  const finalStyleTypes = combinedStyleTypes.slice(0, 3);
 
-    data = await dal.findOneAndUpsert(
-      BasicDetailsModel,
-      { _id: check._id },
-      { $set: { styleType: finalStyleTypes } },
-    );
-  }
+  data = await dal.findOneAndUpsert(
+    BasicDetailsModel,
+    { userId: value.profileId },
+    { $set: { styleType: finalStyleTypes } },
+  );
 
   return { styleType: data.styleType };
+};
+const otherbrandsUpdateService = async value => {
+  const check = await dal.findOne(BasicDetailsModel, {
+    userId: value.profileId,
+  });
+
+  let data = {};
+
+  let newStyleTypes = value?.brands?.split(",").map(style => style.trim());
+
+  let currentStyleTypes = check?.brands || [];
+
+  const combinedStyleTypes = [
+    ...new Set([...newStyleTypes, ...currentStyleTypes]),
+  ];
+
+  const finalStyleTypes = combinedStyleTypes.slice(0, 5);
+
+  data = await dal.findOneAndUpsert(
+    BasicDetailsModel,
+    { userId: value.profileId },
+    { $set: { brands: finalStyleTypes } },
+  );
+
+  return { brands: data.brands };
 };
 
 module.exports = {
@@ -222,4 +245,5 @@ module.exports = {
   accountDetailsService,
   addMemberService,
   otherStyleUpdateService,
+  otherbrandsUpdateService,
 };
