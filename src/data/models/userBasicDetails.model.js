@@ -11,7 +11,6 @@ const userBasicSchema = Schema(
     },
     deviceId: {
       type: Schema.ObjectId,
-      unique: true,
     },
     priceRange: {
       type: String,
