@@ -7,6 +7,7 @@ const {
   BasicDetailsModel,
 } = require("../../data/models/userBasicDetails.model");
 const dal = require("../../data/dal/index");
+const { familyModel } = require("../../data/models/family.model");
 
 const uploadService = async (buffer, uploadedFileName, body, device_token) => {
   const url = await uploadGeneralFile(buffer, uploadedFileName);
@@ -34,4 +35,8 @@ const uploadService = async (buffer, uploadedFileName, body, device_token) => {
   return response;
 };
 
-module.exports = { uploadService };
+const uploadOtherService = async (buffer, uploadedFileName) => {
+  const url = await uploadGeneralFile(buffer, uploadedFileName);
+  return { url };
+};
+module.exports = { uploadService, uploadOtherService };
