@@ -1,29 +1,23 @@
-# Use Node.js base image
-FROM node:18-alpine
+# Use a base image that includes both Python 3.12 and Node.js 18
+FROM nikolaik/python-nodejs:python3.12-nodejs18
 
-# Install build tools for native dependencies
-RUN apk add --no-cache make g++ python3
+# Set environment variables to ensure 'python' and 'python3' point to Python 3
+RUN ln -sf /usr/bin/python3 /usr/bin/python
 
-# Set environment variables
-ENV PYTHON=/usr/bin/python3
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV npm_config_build_from_source=false
-
-# Set the working directory
+# Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Install dependencies
-RUN npm cache clean --force && npm install --legacy-peer-deps --build-from-source=false
+# Install Node.js dependencies
+RUN npm install --legacy-peer-deps
 
-# Copy the rest of the application code
+# Copy the rest of the application code to the container
 COPY . .
 
-# Expose the application port
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Start the application
+# Define the command to run your app
 CMD ["npm", "start"]
