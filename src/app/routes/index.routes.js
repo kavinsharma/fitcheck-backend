@@ -13,6 +13,7 @@ const profileRouter = require("./profile.routes.js");
 const userRouter = require("./users.routes.js");
 
 const router = express.Router();
+
 router.use("/product", productRouter);
 router.use("/auth", authRouter);
 router.use("/brand", brandRouter);
