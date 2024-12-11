@@ -1,9 +1,5 @@
 const { ResponseMessages } = require("../../core/constants/cloud.constants");
-const {
-  getErrorMessage,
-  getErrorCode,
-} = require("../../core/handlers/error.handlers");
-const errorHandlerMiddleware = require("../../core/handlers/mongooseError.handler");
+
 const { responseHandler } = require("../../core/handlers/response.handlers");
 const service = require("../service/brands.service");
 const { search } = require("../../data/query/general.query");
@@ -46,7 +42,7 @@ exports.bulkCreate = async (req, res, next) => {
 exports.getList = async (req, res, next) => {
   try {
     let queryFilter = req.query ? req.query : {};
-
+    let sortingFormat = -1;
     let filter = { status: "active" };
     // handling pagination ...
     const pagination = { skip: 0, limit: 10 };
@@ -60,6 +56,9 @@ exports.getList = async (req, res, next) => {
     if (Object.entries(req.body).length > 0) {
       queryFilter = req.body;
     }
+    if (queryFilter.sort) {
+      sortingFormat = queryFilter.sort ? 1 : -1;
+    }
 
     if (queryFilter.name) {
       filter["name"] = { $regex: queryFilter.name, $options: "i" };
@@ -71,9 +70,7 @@ exports.getList = async (req, res, next) => {
       };
     }
 
-    console.log("🚀 ~ exports.getList= ~ filter:", filter);
-    const queries = search(filter, pagination);
-    console.log("🚀 ~ exports.getList= ~ queries:", queries);
+    const queries = search(filter, sortingFormat, pagination);
 
     let response = await service.search(queries);
 

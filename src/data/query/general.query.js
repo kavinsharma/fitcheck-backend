@@ -1,4 +1,4 @@
-exports.search = (filter, pagination) => {
+exports.search = (filter, sort, pagination) => {
   const baseQuery = [
     {
       $match: {
@@ -11,7 +11,7 @@ exports.search = (filter, pagination) => {
     ...baseQuery,
     {
       $sort: {
-        createdAt: -1,
+        createdAt: sort || -1,
       },
     },
     {
