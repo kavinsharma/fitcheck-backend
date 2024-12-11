@@ -19,7 +19,7 @@ const dynamicFilters = async (data, filterType, filterValue) => {
     let filterdata;
 
     for (const filter of data?.filters) {
-      if (filter.type === filterType) {
+      if (filter?.type === filterType) {
         for (const op of filter.options) {
           if (op.text.toLowerCase() === filterValue.toLowerCase()) {
             filterdata = await baseSearch(op.serpapi_link);
@@ -37,4 +37,19 @@ const dynamicFilters = async (data, filterType, filterValue) => {
   }
 };
 
-module.exports = { baseSearch, dynamicFilters, productSearch };
+const priceFilter = async (data, minPrice) => {
+  try {
+    const filteredResults = data.shopping_results.filter(item => {
+      const price = parseFloat(item.price.replace("$", ""));
+
+      return price > minPrice;
+    });
+
+    return filteredResults.length < 3 ? data : filteredResults;
+  } catch {
+    console.error("Error in dynamicFilters:", error);
+    return data;
+  }
+};
+
+module.exports = { baseSearch, dynamicFilters, productSearch, priceFilter };

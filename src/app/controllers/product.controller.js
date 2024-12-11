@@ -6,12 +6,16 @@ const {
 const errorHandlerMiddleware = require("../../core/handlers/mongooseError.handler");
 const { responseHandler } = require("../../core/handlers/response.handlers");
 const { serapiSearchHandler } = require("../../core/utils/searchHandler.utils");
-const { dynamicFilters, productSearch } = require("../../core/utils/api.utils");
+const {
+  dynamicFilters,
+  productSearch,
+  priceFilter,
+} = require("../../core/utils/api.utils");
 
 const getList = async (req, res, next) => {
   try {
     const params = req.query;
-
+    const minPrice = req?.query?.minPrice;
     let data = await serapiSearchHandler({
       brands: params?.brands,
       maxPrice: params?.maxPrice,
@@ -25,6 +29,10 @@ const getList = async (req, res, next) => {
     }
     if (params.size) {
       filterData = await dynamicFilters(filterData, "Size", params.size);
+    }
+
+    if (minPrice) {
+      filterData = await priceFilter(data, minPrice);
     }
 
     responseHandler(
