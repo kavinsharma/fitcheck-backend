@@ -69,8 +69,8 @@ exports.getList = async (req, res, next) => {
       };
     }
 
-    const queries = search(filter, pagination);
-
+    const sort = -1;
+    const queries = search(filter, sort, pagination);
     let response = await service.search(queries);
 
     responseHandler(res, response);

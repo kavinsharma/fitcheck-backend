@@ -68,10 +68,8 @@ exports.getList = async (req, res, next) => {
         $in: queryFilter.id?.split(",").map(el => ObjectId(el)),
       };
     }
-
-    console.log("🚀 ~ exports.getList= ~ filter:", filter);
-    const queries = search(filter, pagination);
-    console.log("🚀 ~ exports.getList= ~ queries:", queries);
+    const sort = -1;
+    const queries = search(filter, sort, pagination);
 
     let response = await service.search(queries);
 
