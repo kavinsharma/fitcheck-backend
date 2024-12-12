@@ -37,19 +37,19 @@ const dynamicFilters = async (data, filterType, filterValue) => {
   }
 };
 
-const priceFilter = async (data, minPrice) => {
+const priceFilter = async (data, minPrice, maxPrice) => {
   try {
     const filteredResults = data.shopping_results.filter(item => {
       const price = parseFloat(item.price.replace("$", ""));
 
-      return price > minPrice;
+      return price > minPrice && price < maxPrice;
     });
+    console.log("~ filteredResults ~ filteredResults:", filteredResults);
 
     return filteredResults.length < 3 ? data : filteredResults;
-  } catch {
+  } catch (error) {
     console.error("Error in dynamicFilters:", error);
     return data;
   }
 };
-
 module.exports = { baseSearch, dynamicFilters, productSearch, priceFilter };
