@@ -68,8 +68,27 @@ exports.getList = async (req, res, next) => {
         $in: queryFilter.id?.split(",").map(el => ObjectId(el)),
       };
     }
-    const sort = -1;
-    const queries = search(filter, sort, pagination);
+    let sortingFormat = {};
+    if (queryFilter.sort === "alphabetical") {
+      sortingFormat = {
+        $sort: {
+          size: 1, // Alphabetical order
+        },
+      };
+    } else if (queryFilter.sort) {
+      sortingFormat = {
+        $sort: {
+          createdAt: 1, // Order by insertion (ascending)
+        },
+      };
+    } else {
+      sortingFormat = {
+        $sort: {
+          createdAt: -1, // Default order (descending)
+        },
+      };
+    }
+    const queries = search(filter, sortingFormat, pagination);
 
     let response = await service.search(queries);
 

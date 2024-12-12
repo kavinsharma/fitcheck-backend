@@ -9,11 +9,7 @@ exports.search = (filter, sort, pagination) => {
 
   const dataQuery = [
     ...baseQuery,
-    {
-      $sort: {
-        createdAt: sort || -1,
-      },
-    },
+    sort,
     {
       $skip: pagination?.skip,
     },

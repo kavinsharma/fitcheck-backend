@@ -56,8 +56,24 @@ exports.getList = async (req, res, next) => {
     if (Object.entries(req.body).length > 0) {
       queryFilter = req.body;
     }
-    if (queryFilter.sort) {
-      sortingFormat = queryFilter.sort ? 1 : -1;
+    if (queryFilter.sort === "alphabetical") {
+      sortingFormat = {
+        $sort: {
+          name: 1, // Alphabetical order
+        },
+      };
+    } else if (queryFilter.sort) {
+      sortingFormat = {
+        $sort: {
+          createdAt: 1, // Order by insertion (ascending)
+        },
+      };
+    } else {
+      sortingFormat = {
+        $sort: {
+          createdAt: -1, // Default order (descending)
+        },
+      };
     }
 
     if (queryFilter.name) {
