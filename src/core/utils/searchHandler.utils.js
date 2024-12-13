@@ -4,7 +4,6 @@ const serapiSearchHandler = async filters => {
   try {
     const { sex, minPrice, maxPrice, styleType, location, language, brands } =
       filters;
-
     let searchQuery = "";
 
     if (sex) searchQuery += `${sex}+`;

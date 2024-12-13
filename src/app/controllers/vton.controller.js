@@ -127,7 +127,7 @@ const getClassify = async metaTags => {
 const getImage = async (req, res, next) => {
   try {
     const body = req.body;
-    console.log("🚀 ~ getImage ~ body:", body);
+
     let metaTags = req.body.metaTags;
 
     if (!metaTags || !Array.isArray(metaTags)) {
@@ -135,7 +135,7 @@ const getImage = async (req, res, next) => {
     }
     const metatag = await getClassify(body?.metaTags);
     const payload = {
-      inputs: {
+      input: {
         person_image_url: req.body.personImageUrl,
         cloth_image_url: req.body.clothImageUrl,
         cloth_type: metatag,

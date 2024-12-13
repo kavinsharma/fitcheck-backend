@@ -63,14 +63,13 @@ const vtonWrapper = async payload => {
       "Content-Type": "application/json",
       Authorization:
         "Bearer rpa_B3E3KPG9MC5F7K8K5EBNOCD1B0ZBD29G3VYRM0Y61yz2f6",
-      Cookie: "__cflb=0H28v2ycMsGacX9vgDs2aByvf6A3Ca2Jj7dR7dijd4q",
     },
     data: data,
   };
 
   try {
     const response = await axios.request(config);
-    console.log("🚀 ~ vtonWrapper ~ response:", JSON.stringify(response));
+
     console.log(JSON.stringify(response.data));
     return response.data;
   } catch (error) {
