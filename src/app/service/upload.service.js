@@ -37,6 +37,7 @@ const uploadService = async (buffer, uploadedFileName, body, device_token) => {
 
 const uploadOtherService = async (buffer, uploadedFileName) => {
   const url = await uploadGeneralFile(buffer, uploadedFileName);
+  console.log("🚀 ~ uploadOtherService ~ url:", url);
   return { url };
 };
 

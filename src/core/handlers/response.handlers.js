@@ -3,7 +3,7 @@ const { Response } = require("express");
 const responseHandler = (res, body, status = 200, message = "") => {
   const returnBody = {
     ...body,
-    status: status,
+    status: status || 200,
     message: message,
   };
   return res.status(status).json(returnBody);

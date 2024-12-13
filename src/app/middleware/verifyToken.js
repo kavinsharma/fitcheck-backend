@@ -11,7 +11,6 @@ const verifyToken = async (req, res, next) => {
   try {
     const deviceToken = req.header("deviceToken");
     const token = req.header("access-token")?.replace("Bearer", "").trim();
-    console.log("🚀 ~ verifyToken ~ token:", token);
 
     if (token && deviceToken) {
       const decodedData = decodeUserToken(token);

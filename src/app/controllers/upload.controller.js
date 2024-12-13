@@ -14,8 +14,8 @@ const upload = async (req, res, next) => {
     const uploadedFileName = req.file?.originalname || "fitcheck_data_file";
     if (!buffer) {
       return responseHandler(
-        null,
         res,
+        null,
         400,
         'Please provide "filename" in query!',
       );
@@ -27,6 +27,7 @@ const upload = async (req, res, next) => {
       body,
       deviceToken,
     );
+    console.log("🚀 ~ upload ~ data:", data);
 
     responseHandler(res, { data }, 200, ResponseMessages.OK);
   } catch (err) {

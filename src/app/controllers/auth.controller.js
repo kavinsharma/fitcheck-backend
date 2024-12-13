@@ -53,11 +53,11 @@ const userDetails = async (req, res, next) => {
   try {
     const user = req.userData;
     const value = req.value;
-
+    const token = req.header("access-token")?.replace("Bearer", "").trim();
     const data = await userDetailsService(user.userId, value);
     responseHandler(
       res,
-      { data },
+      { ...data, access_token: token },
       200,
       ResponseMessages.RES_MSG_USER_UPDATED_SUCCESSFULLY_EN,
     );
