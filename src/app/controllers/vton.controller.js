@@ -1,17 +1,13 @@
-const router = require("express").Router();
-const multer = require("multer");
-const upload = multer();
-
-const {
-  upload: uploadController,
-  uploadOtherUser,
-} = require("../controllers/upload.controller");
-const { verifyToken } = require("../middleware/verifyToken");
-
-router.route("/").post(upload.single("files"), uploadController);
-
 const spellchecker = require("spellchecker");
 const natural = require("natural");
+const errorHandlerMiddleware = require("../../core/handlers/mongooseError.handler");
+const {
+  CustomError,
+  getErrorCode,
+  getErrorMessage,
+} = require("../../core/handlers/error.handlers");
+const { responseHandler } = require("../../core/handlers/response.handlers");
+const { vtonWrapper } = require("../../core/utils/api.utils");
 
 const categories = {
   upper: [
@@ -112,26 +108,52 @@ function classifyMetaTag(metaTag) {
 
   return findClosestMatch(sanitizedTag);
 }
+const getClassify = async metaTags => {
+  try {
+    if (!metaTags || !Array.isArray(metaTags)) {
+      throw new CustomError("Please send the metatag", 400);
+    }
 
-router.route("/classify").post((req, res) => {
-  const { metaTags } = req.body;
+    const results = metaTags.map(tag => ({
+      metaTag: tag,
+      category: classifyMetaTag(tag),
+    }));
 
-  if (!metaTags || !Array.isArray(metaTags)) {
-    return res
-      .status(400)
-      .json({ error: "Invalid input. Please provide an array of meta tags." });
+    return results[0]?.category;
+  } catch (error) {
+    console.log("🚀 ~ getClassify ~ error:", error);
   }
+};
+const getImage = async (req, res, next) => {
+  try {
+    const body = req.body;
+    console.log("🚀 ~ getImage ~ body:", body);
+    let metaTags = req.body.metaTags;
 
-  const results = metaTags.map(tag => ({
-    metaTag: tag,
-    category: classifyMetaTag(tag),
-  }));
+    if (!metaTags || !Array.isArray(metaTags)) {
+      throw new CustomError("Please send the metatag", 400);
+    }
+    const metatag = await getClassify(body?.metaTags);
+    const payload = {
+      inputs: {
+        person_image_url: req.body.personImageUrl,
+        cloth_image_url: req.body.clothImageUrl,
+        cloth_type: metatag,
+        num_inference_steps: 50,
+        guidance_scale: 2.5,
+        seed: 42,
+      },
+    };
+    const imageGenerated = await vtonWrapper(payload);
+    responseHandler(res, { imageGenerated }, 200, "ok");
+  } catch (error) {
+    const errorMongoose = errorHandlerMiddleware(error, res);
+    let code = errorMongoose.statusCode;
+    let message = errorMongoose.msg;
+    code = getErrorCode(error);
+    message = getErrorMessage(error);
+    return responseHandler(res, null, code, message);
+  }
+};
 
-  res.json({ results });
-});
-
-router
-  .route("/member-image")
-  .post(verifyToken, upload.single("files"), uploadOtherUser);
-
-module.exports = router;
+module.exports = { getImage };

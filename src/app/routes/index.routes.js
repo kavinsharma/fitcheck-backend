@@ -11,7 +11,7 @@ const styleTypeRouter = require("./styleType.routes.js");
 const closetRouter = require("./closets.routes.js");
 const profileRouter = require("./profile.routes.js");
 const userRouter = require("./users.routes.js");
-
+const vtonRouter = require("./vton.routes.js");
 const router = express.Router();
 
 router.use("/product", productRouter);
@@ -24,6 +24,7 @@ router.use("/profile", profileRouter);
 router.use("/user", userRouter);
 
 router.use("/upload", uploadRouter);
+router.use("/vton", vtonRouter);
 router.get("/hello-world", async (req, res, next) => {
   return res.status(200).json({ data: "Hello from backend" });
 });

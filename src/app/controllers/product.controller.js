@@ -22,6 +22,7 @@ const getList = async (req, res, next) => {
       minPrice: params?.minPrice,
       sex: params?.sex,
       age: params?.age,
+      location: params.location,
     });
     let filterData = {};
     if (params.color) {

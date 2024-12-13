@@ -4,6 +4,7 @@ const serapiSearchHandler = async filters => {
   try {
     const { sex, minPrice, maxPrice, styleType, location, language, brands } =
       filters;
+
     let searchQuery = "";
 
     if (sex) searchQuery += `${sex}+`;
@@ -18,7 +19,7 @@ const serapiSearchHandler = async filters => {
     const params = {
       engine: "google_shopping",
       q: searchQuery,
-      location: location,
+      gl: location,
       // hl: language,
       api_key: config.SERPAPI_SECRET_KEY,
     };

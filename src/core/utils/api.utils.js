@@ -44,12 +44,44 @@ const priceFilter = async (data, minPrice, maxPrice) => {
 
       return price > minPrice && price < maxPrice;
     });
-    console.log("~ filteredResults ~ filteredResults:", filteredResults);
-
     return filteredResults.length < 3 ? data : filteredResults;
   } catch (error) {
     console.error("Error in dynamicFilters:", error);
     return data;
   }
 };
-module.exports = { baseSearch, dynamicFilters, productSearch, priceFilter };
+
+const vtonWrapper = async payload => {
+  const data = JSON.stringify(payload);
+  console.log("🚀 ~ vtonWrapper ~ data:", data);
+
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: "https://api.runpod.ai/v2/3toxf3ek71uqfh/runsync",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization:
+        "Bearer rpa_B3E3KPG9MC5F7K8K5EBNOCD1B0ZBD29G3VYRM0Y61yz2f6",
+      Cookie: "__cflb=0H28v2ycMsGacX9vgDs2aByvf6A3Ca2Jj7dR7dijd4q",
+    },
+    data: data,
+  };
+
+  try {
+    const response = await axios.request(config);
+    console.log("🚀 ~ vtonWrapper ~ response:", JSON.stringify(response));
+    console.log(JSON.stringify(response.data));
+    return response.data;
+  } catch (error) {
+    console.error("Error in vtonWrapper:", error);
+    throw error;
+  }
+};
+module.exports = {
+  baseSearch,
+  dynamicFilters,
+  productSearch,
+  priceFilter,
+  vtonWrapper,
+};
