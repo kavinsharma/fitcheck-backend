@@ -5,7 +5,11 @@ const ClosetModel = require("../../data/models/closets.model");
 const DeviceModel = require("../../data/models/device.model");
 
 const closetService = async (value, deviceData) => {
-  const data = await dal.findOne(ClosetModel, { productId: value.productId });
+  const data = await dal.findOne(ClosetModel, {
+    productId: value.productId,
+    deviceToken: value.deviceToken,
+  });
+  console.log("🚀 ~ closetService ~ data:", data);
   if (data) {
     throw new CustomError(
       ResponseMessages.RES_USER_PRODUCT_ALREADY_EXISTS,
@@ -50,11 +54,11 @@ const compareService = async value => {
   return data;
 };
 
-const getClosetService =  async(filter) => {
-
-
-  const data = await dal.find(ClosetModel,{$or:[{userId:filter.userId},{productId:filter.productId}]})
-  return data 
+const getClosetService = async filter => {
+  const data = await dal.find(ClosetModel, {
+    $or: [{ userId: filter.userId }, { productId: filter.productId }],
+  });
+  return data;
 };
 
 module.exports = { closetService, compareService, getClosetService };

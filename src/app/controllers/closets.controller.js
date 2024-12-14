@@ -14,6 +14,8 @@ const {
 const addCloset = async (req, res, next) => {
   try {
     const value = req.value;
+    const deviceToken = req.userData.deviceToken;
+    console.log("🚀 ~ addCloset ~ deviceToken:", deviceToken);
 
     let data = {};
     const deviceData = {
@@ -26,7 +28,7 @@ const addCloset = async (req, res, next) => {
     delete value?.lat;
     delete value?.deviceUid;
     if (req.userData?.deviceToken) {
-      value.deviceToken = req.userData.deviceToken;
+      value.deviceToken = deviceToken;
       data = await closetService(value, deviceData);
     }
 

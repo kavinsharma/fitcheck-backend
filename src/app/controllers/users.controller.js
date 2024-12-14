@@ -18,9 +18,9 @@ const { ResponseMessages } = require("../../core/constants/cloud.constants");
 
 const getProfile = async (req, res, next) => {
   try {
-    const userId = req.userData.userId;
+    const userId = req.userData?.userId;
 
-    const deviceToken = req.userData.deviceToken;
+    const deviceToken = req.userData?.deviceToken;
 
     const data = await getProfileService(userId, deviceToken);
     responseHandler(res, { data }, 200, ResponseMessages.OK);
@@ -80,7 +80,7 @@ const updateStyleType = async (req, res, next) => {
 const updateBrandType = async (req, res, next) => {
   try {
     const value = req.body;
-    const userId = req.userData.userId;
+    const userId = req.userData?.userId;
 
     const deviceToken = req.userData.deviceToken;
 
